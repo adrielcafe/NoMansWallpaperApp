@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vRoot"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.wallpaper.WallpaperActivity">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/vWallpaper"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:transitionName="wallpaper"
+        tools:srcCompat="@tools:sample/avatars"/>
+
+    <androidx.appcompat.widget.AppCompatImageButton
+        android:id="@+id/vClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:background="?actionBarItemBackground"
+        android:src="@drawable/ic_arrow_back"
+        android:tint="@android:color/white"
+        android:visibility="invisible"
+        tools:visibility="visible"/>
+
+    <com.hlab.fabrevealmenu.view.FABRevealMenu
+        android:id="@+id/vOptionsMenu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:menuTitleTextColor="@android:color/white"
+        app:menuBackgroundColor="@color/colorAccent"
+        app:menuDirection="up"
+        app:menuSize="small"
+        app:menuRes="@menu/wallpaper_options"/>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/vShowOptions"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
+        android:src="@drawable/ic_add"
+        android:tint="@android:color/white"
+        android:visibility="invisible"
+        app:layout_behavior="cafe.adriel.nomanswallpaper.view.custom.FabBehavior"
+        tools:visibility="visible"/>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

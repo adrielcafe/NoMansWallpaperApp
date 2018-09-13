@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/opt_set_wallpaper"
+        android:icon="@drawable/ic_format_paint"
+        android:title="@string/set_wallpaper"/>
+
+    <item
+        android:id="@+id/opt_set_as"
+        android:icon="@drawable/ic_add_to_photos"
+        android:title="@string/set_as"/>
+
+    <item
+        android:id="@+id/opt_download"
+        android:icon="@drawable/ic_file_download"
+        android:title="@string/download"/>
+
+    <item
+        android:id="@+id/opt_share"
+        android:icon="@drawable/ic_share"
+        android:title="@string/share"/>
+
+</menu>

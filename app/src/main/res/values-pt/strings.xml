@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hi_there_are_you_enjoying_the_app">Olá! Você está curtindo o app? Espero que sim 😊\n\nSe você tiver alguma dúvida, sugestão ou deseja contribuir (novo conteúdo, encontrou um bug, tradução…) por favor entre em contato comigo usando os links abaixo.</string>
+    <string name="this_app_is_open_source">Esse aplicativo é open source, contribuições são muito bem-vindas!</string>
+    <string name="update_available">Atualização Disponível</string>
+    <string name="new_version_available_update_now">Uma nova versão está disponível. Deseja atualizar agora?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="open">Abrir</string>
+    <string name="open_menu">Abrir menu</string>
+    <string name="close_menu">Fechar menu</string>
+    <string name="about">Sobre</string>
+    <string name="buy_me_coffee">Pague-me um Café</string>
+    <string name="share">Compartilhar</string>
+    <string name="rate_review">Avaliar</string>
+    <string name="you_should_try">Dá uma olhada em No Man\'s Wallpaper!</string>
+    <string name="thanks_for_support">Obrigado pelo seu apoio! ☕ 😋</string>
+    <string name="later">Depois</string>
+    <string name="donate">Doar</string>
+    <string name="wallpaper_set">Plano de fundo definido!</string>
+    <string name="wallpaper_downloaded">Papel de parede salvo na sua galeria</string>
+    <string name="something_went_wrong">Oops! Algo deu errado</string>
+    <string name="set_wallpaper">Usar como Plano de Fundo</string>
+    <string name="set_as">Usar como…</string>
+    <string name="download">Baixar</string>
+    <string name="permissions_needed">Por favor, dê permissão para usar este recurso</string>
+    <string name="allow">Permitir</string>
+
+</resources>

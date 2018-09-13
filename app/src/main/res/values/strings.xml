@@ -1,0 +1,34 @@
+<resources>
+
+    <string name="full_app_name" translatable="false">No Man\'s Wallpaper</string>
+    <string name="adriel_cafe" translatable="false">Adriel Café</string>
+    <string name="android_developer" translatable="false">Android Developer</string>
+    <string name="adrielcafe_nomanswallpaperapp" translatable="false">adrielcafe/NoMansWallpaperApp</string>
+
+    <string name="hi_there_are_you_enjoying_the_app">Hi there! Are you enjoying the app? I hope so 😊\n\nIf you have any question, suggestion or want to contribute (new content, found a bug, translation…) please contact me using the links below.</string>
+    <string name="this_app_is_open_source">This app is open source, contributions are very welcome!</string>
+    <string name="update_available">Update Available</string>
+    <string name="new_version_available_update_now">A new version is available. Do you want to update now?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="open">Open</string>
+    <string name="open_menu">Open menu</string>
+    <string name="close_menu">Close menu</string>
+    <string name="about">About</string>
+    <string name="buy_me_coffee">Buy Me A Coffee</string>
+    <string name="share">Share</string>
+    <string name="rate_review">Rate &amp; Review</string>
+    <string name="you_should_try">You should try No Man\'s Wallpaper!</string>
+    <string name="thanks_for_support">Thank you for your support! ☕ 😋</string>
+    <string name="later">Later</string>
+    <string name="donate">Donate</string>
+    <string name="wallpaper_set">Wallpaper set!</string>
+    <string name="wallpaper_downloaded">Wallpaper saved to your gallery</string>
+    <string name="something_went_wrong">Oops! Something went wrong</string>
+    <string name="set_wallpaper">Set as Wallpaper</string>
+    <string name="set_as">Set as…</string>
+    <string name="download">Download</string>
+    <string name="permissions_needed">Please give permission to use this feature</string>
+    <string name="allow">Allow</string>
+
+</resources>
