@@ -153,10 +153,8 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
             val rationaleSnackBar =
                 Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
             val rationale = SnackBarRationale(rationaleSnackBar, getString(R.string.allow))
-            val result = Peko.requestPermissionsAsync(
-                this@WallpaperActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
-            ).await()
+            val result = Peko.requestPermissionsAsync(this@WallpaperActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale).await()
             if (Manifest.permission.WRITE_EXTERNAL_STORAGE in result.grantedPermissions) {
                 viewModel.downloadWallpaper(wallpaper)
             }

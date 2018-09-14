@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <cafe.adriel.nomanswallpaper.view.custom.WallpaperImageView
         android:id="@+id/vWallpaper"
         android:layout_width="match_parent"
         android:layout_height="300dp"
