@@ -21,4 +21,9 @@
         android:icon="@drawable/ic_share"
         android:title="@string/share"/>
 
+    <item
+        android:id="@+id/opt_copy_url"
+        android:icon="@drawable/ic_link"
+        android:title="@string/copy_url"/>
+
 </menu>

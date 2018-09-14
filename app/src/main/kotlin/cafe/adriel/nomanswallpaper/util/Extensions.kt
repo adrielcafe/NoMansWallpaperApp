@@ -1,9 +1,7 @@
 package cafe.adriel.nomanswallpaper.util
 
 import android.app.Activity
-import android.content.ClipDescription
-import android.content.Context
-import android.content.Intent
+import android.content.*
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -74,14 +72,21 @@ fun String.share(activity: Activity) =
         .setType(ClipDescription.MIMETYPE_TEXT_PLAIN)
         .startChooser()
 
-fun Uri.open(context: Context) =
-    try {
-        context.startActivity(Intent(Intent.ACTION_VIEW, this))
-    } catch (e: Exception){
-        Crashlytics.logException(e)
-        e.printStackTrace()
-        Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
-    }
+fun String.copyToClipboard(context: Context) = try {
+    context.getSystemService<ClipboardManager>()?.primaryClip =
+            ClipData.newPlainText("Wallpaper URL", this)
+    true
+} catch (e: java.lang.Exception){
+    false
+}
+
+fun Uri.open(context: Context) = try {
+    context.startActivity(Intent(Intent.ACTION_VIEW, this))
+} catch (e: Exception){
+    Crashlytics.logException(e)
+    e.printStackTrace()
+    Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+}
 
 fun View.inflater() = context.getSystemService<LayoutInflater>()!!
 

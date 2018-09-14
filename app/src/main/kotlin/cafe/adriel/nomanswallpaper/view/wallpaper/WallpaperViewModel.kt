@@ -27,6 +27,7 @@ class WallpaperViewModel(app: Application) : AndroidViewModel(app){
 
     companion object {
         private const val PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.provider"
+        private const val MIME_TYPE_IMAGE = "image/*"
         private const val DEFAULT_FILE_NAME = "wallpaper.jpg"
     }
 
@@ -45,13 +46,32 @@ class WallpaperViewModel(app: Application) : AndroidViewModel(app){
                     setWallpaper(wallpaperFile)
                     wallpaperUpdated.value = true
                 } else {
-                    showWallpaperOptions(wallpaperFile)
+                    showSetWallpaperOptions(wallpaperFile)
                 }
                 Analytics.logSetWallpaper(wallpaper)
             } catch (e: Exception){
                 Crashlytics.logException(e)
                 e.printStackTrace()
                 wallpaperUpdated.value = false
+            }
+        }
+    }
+
+    fun shareWallpaper(wallpaper: Wallpaper){
+        launch(UI) {
+            try {
+                val context = getApplication<App>() as Context
+                val wallpaperFile = getWallpaperFile(wallpaper)
+                val uri = FileProvider.getUriForFile(context, PROVIDER_AUTHORITY, wallpaperFile)
+                val intent = Intent(Intent.ACTION_SEND).apply {
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    type = MIME_TYPE_IMAGE
+                }
+                context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_with)))
+                Analytics.logShareWallpaper(wallpaper)
+            } catch (e: Exception){
+                Crashlytics.logException(e)
+                e.printStackTrace()
             }
         }
     }
@@ -72,19 +92,19 @@ class WallpaperViewModel(app: Application) : AndroidViewModel(app){
 
     fun showWallpaperInGallery(wallpaperUri: String){
         Intent(Intent.ACTION_VIEW).run {
-            setDataAndType(Uri.parse(wallpaperUri), "image/*")
+            setDataAndType(Uri.parse(wallpaperUri), MIME_TYPE_IMAGE)
             getApplication<App>().startActivity(this)
         }
     }
 
-    private fun showWallpaperOptions(wallpaperFile: File){
+    private fun showSetWallpaperOptions(wallpaperFile: File){
         val context = getApplication<App>() as Context
         val uri = FileProvider.getUriForFile(context, PROVIDER_AUTHORITY, wallpaperFile)
         val intent = Intent(Intent.ACTION_ATTACH_DATA).apply {
-            setDataAndType(uri, "image/*")
+            setDataAndType(uri, MIME_TYPE_IMAGE)
             addCategory(Intent.CATEGORY_DEFAULT)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-            putExtra("mimeType", "image/*")
+            putExtra("mimeType", MIME_TYPE_IMAGE)
         }
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.set_as)))
     }
@@ -95,14 +115,14 @@ class WallpaperViewModel(app: Application) : AndroidViewModel(app){
     }
 
     private suspend fun saveWallpaperInGallery(wallpaper: Wallpaper) = withContext(IO){
+        val context = getApplication<App>() as Context
         val wallpaperFile = getWallpaperFile(wallpaper)
-        val wallpaperUri = MediaStore.Images.Media.insertImage(
-            getApplication<App>().contentResolver,
+        val wallpaperUri = MediaStore.Images.Media.insertImage(context.contentResolver,
             wallpaperFile.absolutePath, wallpaperFile.name, "By ${wallpaper.author}"
         )
         val mediaScanIntent = Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE)
         mediaScanIntent.data = Uri.parse(wallpaperUri)
-        getApplication<App>().sendBroadcast(mediaScanIntent)
+        context.sendBroadcast(mediaScanIntent)
 
         wallpaperUri
     }

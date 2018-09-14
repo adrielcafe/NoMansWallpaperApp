@@ -52,7 +52,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.25.3"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.26.0"
 
     // Android
     implementation "com.google.android.material:material:$materialVersion"
@@ -70,7 +70,7 @@ dependencies {
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.5"
 
     // DI
-    implementation "org.koin:koin-androidx-viewmodel:1.0.0-RC-2"
+    implementation "org.koin:koin-androidx-viewmodel:1.0.0"
 
     // Data
     implementation "com.squareup.moshi:moshi:$moshiVersion"
@@ -84,7 +84,7 @@ dependencies {
     implementation "com.mikepenz:fastadapter-commons:$fastAdapterVersion"
     implementation "io.github.kobakei:ratethisapp:1.2.0"
     implementation "com.github.lawloretienne:discreteslider:0.0.9"
-    implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.3"
+    implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.4"
 
     // Util
     implementation "com.github.ajalt:timberkt:1.5.1"

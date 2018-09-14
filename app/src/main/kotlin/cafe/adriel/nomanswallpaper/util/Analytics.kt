@@ -9,6 +9,7 @@ object Analytics {
     private const val EVENT_SET_WALLPAPER = "set_wallpaper"
     private const val EVENT_DOWNLOAD_WALLPAPER = "download_wallpaper"
     private const val EVENT_SHARE_WALLPAPER = "share_wallpaper"
+    private const val EVENT_COPY_WALLPAPER_URL = "copy_wallpaper_url"
     private const val EVENT_RATE_APP = "rate_app"
     private const val EVENT_SHARE_APP = "share_app"
     private const val EVENT_SEND_EMAIL = "send_email"
@@ -53,6 +54,13 @@ object Analytics {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_SHARE_WALLPAPER, params)
+    }
+
+    fun logCopyWallpaperUrl(wallpaper: Wallpaper){
+        val params = Bundle().apply {
+            putString(PARAM_URL, wallpaper.url)
+        }
+        analytics?.logEvent(EVENT_COPY_WALLPAPER_URL, params)
     }
 
     fun logSendEmail(){

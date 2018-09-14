@@ -23,9 +23,12 @@
     <string name="something_went_wrong">Oops! Algo deu errado</string>
     <string name="set_wallpaper">Usar como Plano de Fundo</string>
     <string name="set_as">Usar como…</string>
+    <string name="share_with">Compartilhar com…</string>
     <string name="download">Baixar</string>
     <string name="permissions_needed">Por favor, dê permissão para usar este recurso</string>
     <string name="allow">Permitir</string>
     <string name="connect_internet">Conecte-se à internet</string>
+    <string name="copy_url">Copiar URL</string>
+    <string name="url_copied_clipboard">URL copiada para área de transferência</string>
 
 </resources>

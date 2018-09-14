@@ -27,9 +27,12 @@
     <string name="something_went_wrong">Oops! Something went wrong</string>
     <string name="set_wallpaper">Set as Wallpaper</string>
     <string name="set_as">Set as…</string>
+    <string name="share_with">Share with…</string>
     <string name="download">Download</string>
     <string name="permissions_needed">Please give permission to use this feature</string>
     <string name="allow">Allow</string>
     <string name="connect_internet">Connect to the internet</string>
+    <string name="copy_url">Copy URL</string>
+    <string name="url_copied_clipboard">URL copied to Clipboard</string>
 
 </resources>

@@ -70,6 +70,7 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
             getItemById(R.id.opt_set_as).iconDrawable.setTint(Color.WHITE)
             getItemById(R.id.opt_download).iconDrawable.setTint(Color.WHITE)
             getItemById(R.id.opt_share).iconDrawable.setTint(Color.WHITE)
+            getItemById(R.id.opt_copy_url).iconDrawable.setTint(Color.WHITE)
         }
 
         supportPostponeEnterTransition()
@@ -123,7 +124,8 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
                     if(isConnected()) viewModel.setWallpaper(wallpaper, false)
                 R.id.opt_download ->
                     if(isConnected()) downloadWallpaper(wallpaper)
-                R.id.opt_share -> shareWallpaper(wallpaper)
+                R.id.opt_share -> viewModel.shareWallpaper(wallpaper)
+                R.id.opt_copy_url -> copyWallpaperUrl(wallpaper)
             }
         }
     }
@@ -161,9 +163,12 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
         }
     }
 
-    private fun shareWallpaper(wallpaper: Wallpaper){
-        wallpaper.url.share(this)
-        Analytics.logShareWallpaper(wallpaper)
+    private fun copyWallpaperUrl(wallpaper: Wallpaper){
+        val message =
+            if(wallpaper.url.copyToClipboard(this)) R.string.url_copied_clipboard
+            else R.string.something_went_wrong
+        Snackbar.make(vRoot, message, Snackbar.LENGTH_LONG).show()
+        Analytics.logCopyWallpaperUrl(wallpaper)
     }
 
     private fun exit(backPressed: Boolean = false){
