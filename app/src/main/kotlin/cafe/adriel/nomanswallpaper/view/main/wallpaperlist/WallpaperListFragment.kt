@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
+import cafe.adriel.nomanswallpaper.util.isConnected
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperActivity
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -33,6 +34,7 @@ class WallpaperListFragment: Fragment() {
     private val singleViewModel by viewModel<WallpaperViewModel>()
     private val listViewModel by viewModel<WallpaperListViewModel>()
     private lateinit var adapter: FastItemAdapter<WallpaperAdapterItem>
+    private var loadingWallpaper = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallpaper_list, container, false)
@@ -66,7 +68,10 @@ class WallpaperListFragment: Fragment() {
 
         with(view){
             vRefresh.isRefreshing = true
-            vRefresh.setOnRefreshListener { listViewModel.loadWallpapers() }
+            vRefresh.setOnRefreshListener {
+                if(isConnected()) listViewModel.loadWallpapers()
+                else vRefresh.isRefreshing = false
+            }
 
             vWallpaperList.adapter = adapter
         }
@@ -78,7 +83,7 @@ class WallpaperListFragment: Fragment() {
 
     private fun onListItemClicked(view: View, item: WallpaperAdapterItem){
         when(view.id){
-            R.id.vSet -> singleViewModel.setWallpaper(item.wallpaper, false)
+            R.id.vSet -> if(isConnected()) singleViewModel.setWallpaper(item.wallpaper, false)
         }
     }
 
@@ -88,6 +93,11 @@ class WallpaperListFragment: Fragment() {
                 if(success) R.string.wallpaper_set else R.string.something_went_wrong,
                 Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadingWallpaper = false
     }
 
     private fun showWallpapers(wallpapers: List<Wallpaper>){
@@ -104,8 +114,13 @@ class WallpaperListFragment: Fragment() {
     }
 
     private fun showWallpaper(view: View, wallpaper: Wallpaper){
-        activity?.run {
-            WallpaperActivity.start(this, wallpaper, view)
+        if(isConnected()) {
+            activity?.run {
+                if (!loadingWallpaper) {
+                    loadingWallpaper = true
+                    WallpaperActivity.start(this, wallpaper, view)
+                }
+            }
         }
     }
 

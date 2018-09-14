@@ -26,5 +26,6 @@
     <string name="download">Baixar</string>
     <string name="permissions_needed">Por favor, dê permissão para usar este recurso</string>
     <string name="allow">Permitir</string>
+    <string name="connect_internet">Conecte-se à internet</string>
 
 </resources>

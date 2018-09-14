@@ -8,11 +8,13 @@ import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.net.ConnectivityManager
 import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
@@ -20,7 +22,10 @@ import androidx.annotation.LayoutRes
 import androidx.core.app.ShareCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
+import cafe.adriel.nomanswallpaper.R
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.crashlytics.android.Crashlytics
 import org.greenrobot.eventbus.EventBus
 
 val Int.dp: Int
@@ -51,6 +56,17 @@ fun ImageView.clearImage() = GlideApp.with(context.applicationContext).clear(thi
 
 fun Context.colorFrom(@ColorRes colorRes: Int) = ResourcesCompat.getColor(resources, colorRes, theme)
 
+fun Context.isConnected(showMessage: Boolean = true): Boolean {
+    val connected = getSystemService<ConnectivityManager>()
+        ?.activeNetworkInfo?.isConnectedOrConnecting ?: false
+    if(!connected && showMessage){
+        Toast.makeText(this, R.string.connect_internet, Toast.LENGTH_SHORT).show()
+    }
+    return connected
+}
+
+fun Fragment.isConnected(showMessage: Boolean = true) = context?.isConnected(showMessage) ?: false
+
 fun String.share(activity: Activity) =
     ShareCompat.IntentBuilder
         .from(activity)
@@ -59,7 +75,13 @@ fun String.share(activity: Activity) =
         .startChooser()
 
 fun Uri.open(context: Context) =
-    context.startActivity(Intent(Intent.ACTION_VIEW).apply { data = this@open })
+    try {
+        context.startActivity(Intent(Intent.ACTION_VIEW, this))
+    } catch (e: Exception){
+        Crashlytics.logException(e)
+        e.printStackTrace()
+        Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
+    }
 
 fun View.inflater() = context.getSystemService<LayoutInflater>()!!
 

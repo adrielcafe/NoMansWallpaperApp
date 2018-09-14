@@ -30,5 +30,6 @@
     <string name="download">Download</string>
     <string name="permissions_needed">Please give permission to use this feature</string>
     <string name="allow">Allow</string>
+    <string name="connect_internet">Connect to the internet</string>
 
 </resources>

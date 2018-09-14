@@ -27,6 +27,28 @@
         android:visibility="invisible"
         tools:visibility="visible"/>
 
+    <androidx.appcompat.widget.AppCompatTextView
+        android:id="@+id/vAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_gravity="start|bottom"
+        android:gravity="center_vertical"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingStart="5dp"
+        android:paddingEnd="10dp"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textColor="@android:color/black"
+        android:textSize="12sp"
+        android:background="@drawable/bg_rounded_white"
+        android:drawableStart="@drawable/ic_person"
+        android:visibility="invisible"
+        app:fontFamily="sans-serif-condensed-medium"
+        tools:text="@tools:sample/full_names"
+        tools:visibility="visible"/>
+
     <com.hlab.fabrevealmenu.view.FABRevealMenu
         android:id="@+id/vOptionsMenu"
         android:layout_width="match_parent"

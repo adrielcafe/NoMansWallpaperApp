@@ -12,8 +12,7 @@ import cafe.adriel.nomanswallpaper.util.px
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
 
-class WallpaperAdapterItem(val wallpaper: Wallpaper) :
-    AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
+class WallpaperAdapterItem(val wallpaper: Wallpaper) : AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
 
     override fun getIdentifier() = wallpaper.id
 
@@ -31,10 +30,9 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
             vWallpaper.loadImage(wallpaper.url, mainColor)
             vDetailsLayout.setBackgroundColor(mainColorAlpha)
             vAuthor.text = if(wallpaper.author.isNotBlank()) wallpaper.author else "?"
-
-            with(vAuthor.compoundDrawablesRelative[0]) {
+            vAuthor.compoundDrawablesRelative[0]?.run {
                 setTint(Color.WHITE)
-                bounds.inset(3.px, 3.px)
+                bounds.inset(2.px, 2.px)
             }
         }
     }

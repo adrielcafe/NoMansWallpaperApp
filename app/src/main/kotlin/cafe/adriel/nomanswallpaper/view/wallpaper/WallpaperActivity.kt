@@ -8,14 +8,13 @@ import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
-import cafe.adriel.nomanswallpaper.util.Analytics
-import cafe.adriel.nomanswallpaper.util.GlideApp
-import cafe.adriel.nomanswallpaper.util.share
+import cafe.adriel.nomanswallpaper.util.*
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
@@ -57,8 +56,13 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
         setContentView(R.layout.activity_wallpaper)
 
         val mainColor = ColorDrawable(Color.parseColor(wallpaper.mainColorHex))
+        vClose.setOnClickListener { exit() }
         vWallpaper.background = mainColor
-        vClose.setOnClickListener { supportFinishAfterTransition() }
+        vAuthor.text = if(wallpaper.author.isNotBlank()) wallpaper.author else "?"
+        vAuthor.compoundDrawablesRelative[0]?.run {
+            setTint(Color.BLACK)
+            bounds.inset(2.px, 2.px)
+        }
         with(vOptionsMenu) {
             bindAnchorView(vShowOptions)
             setOnFABMenuSelectedListener(this@WallpaperActivity)
@@ -92,23 +96,20 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        launch(UI) {
-            delay(500)
+        vShowOptions.postDelayed({
             vClose.visibility = View.VISIBLE
+            vAuthor.visibility = View.VISIBLE
+            vClose.startAnimation(AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_in))
+            vAuthor.startAnimation(AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
             vShowOptions.show()
-        }
+        }, 500)
     }
 
     override fun onBackPressed() {
         if(vShowOptions.isOrWillBeHidden) {
             super.onBackPressed()
         } else {
-            vShowOptions.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
-                override fun onHidden(fab: FloatingActionButton?) {
-                    vClose.visibility = View.INVISIBLE
-                    onBackPressed()
-                }
-            })
+            exit(true)
         }
     }
 
@@ -116,9 +117,12 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
         launch(UI) {
             delay(AnimationHelper.REVEAL_DURATION)
             when (id) {
-                R.id.opt_set_wallpaper -> viewModel.setWallpaper(wallpaper, true)
-                R.id.opt_set_as -> viewModel.setWallpaper(wallpaper, false)
-                R.id.opt_download -> downloadWallpaper(wallpaper)
+                R.id.opt_set_wallpaper ->
+                    if(isConnected()) viewModel.setWallpaper(wallpaper, true)
+                R.id.opt_set_as ->
+                    if(isConnected()) viewModel.setWallpaper(wallpaper, false)
+                R.id.opt_download ->
+                    if(isConnected()) downloadWallpaper(wallpaper)
                 R.id.opt_share -> shareWallpaper(wallpaper)
             }
         }
@@ -145,11 +149,14 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
     }
 
     private fun downloadWallpaper(wallpaper: Wallpaper){
-        launch (UI) {
-            val rationaleSnackBar = Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
+        launch(UI) {
+            val rationaleSnackBar =
+                Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
             val rationale = SnackBarRationale(rationaleSnackBar, getString(R.string.allow))
-            val result = Peko.requestPermissionsAsync(this@WallpaperActivity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale).await()
+            val result = Peko.requestPermissionsAsync(
+                this@WallpaperActivity,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
+            ).await()
             if (Manifest.permission.WRITE_EXTERNAL_STORAGE in result.grantedPermissions) {
                 viewModel.downloadWallpaper(wallpaper)
             }
@@ -157,12 +164,20 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener {
     }
 
     private fun shareWallpaper(wallpaper: Wallpaper){
-        if(wallpaper.author.isNotBlank()) {
-            "No Man's Sky wallpaper by ${wallpaper.author}\n${wallpaper.url}".share(this)
-        } else {
-            "No Man's Sky wallpaper\n${wallpaper.url}".share(this)
-        }
+        wallpaper.url.share(this)
         Analytics.logShareWallpaper(wallpaper)
+    }
+
+    private fun exit(backPressed: Boolean = false){
+        vClose.startAnimation(AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_out))
+        vAuthor.startAnimation(AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_out))
+        vShowOptions.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
+            override fun onHidden(fab: FloatingActionButton?) {
+                vClose.visibility = View.INVISIBLE
+                vAuthor.visibility = View.INVISIBLE
+                if(backPressed) onBackPressed() else finishAfterTransition()
+            }
+        })
     }
 
 }
