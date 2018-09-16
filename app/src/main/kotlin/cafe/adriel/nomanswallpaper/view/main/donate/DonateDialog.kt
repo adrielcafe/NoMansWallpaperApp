@@ -33,7 +33,12 @@ class DonateDialog private constructor() {
                             DrawableCompat.setTint(this, context.colorFrom(R.color.colorAccent))
                         }
                         with(getButton(AlertDialog.BUTTON_POSITIVE)) {
-                            setCompoundDrawablesRelativeWithIntrinsicBounds(coffeeIcon, null, null, null)
+                            setCompoundDrawablesRelativeWithIntrinsicBounds(
+                                coffeeIcon,
+                                null,
+                                null,
+                                null
+                            )
                             compoundDrawablePadding = 5.px
                         }
                     }

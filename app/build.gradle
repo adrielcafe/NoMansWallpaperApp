@@ -53,6 +53,8 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.26.0"
+    implementation 'com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.0'
+    implementation 'com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.0'
 
     // Android
     implementation "com.google.android.material:material:$materialVersion"
@@ -69,9 +71,6 @@ dependencies {
     implementation "com.google.firebase:firebase-perf:16.1.0"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.5"
 
-    // DI
-    implementation "org.koin:koin-androidx-viewmodel:1.0.0"
-
     // Data
     implementation "com.squareup.moshi:moshi:$moshiVersion"
     implementation "com.squareup.moshi:moshi-kotlin:$moshiVersion"
@@ -87,11 +86,11 @@ dependencies {
     implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.4"
 
     // Util
+    implementation "org.koin:koin-androidx-viewmodel:1.0.0"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.StephenVinouze:KinApp:1.0.2"
     implementation "com.markodevcic.peko:peko:0.31"
-
 }
 
 apply plugin: 'com.google.gms.google-services'

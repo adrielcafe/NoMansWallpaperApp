@@ -6,4 +6,5 @@ data class Wallpaper(
     val id: Long,
     val url: String,
     val mainColorHex: String = "#000",
-    val author: String = "") : AutoParcelable
+    val author: String = ""
+) : AutoParcelable

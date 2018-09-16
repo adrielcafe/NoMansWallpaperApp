@@ -6,10 +6,10 @@ import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.transaction
 import androidx.lifecycle.Observer
+import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
 import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
@@ -22,14 +22,13 @@ import com.google.android.material.snackbar.Snackbar
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -39,13 +38,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setSupportActionBar(vToolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             supportFragmentManager.transaction {
-                replace(R.id.vContent, WallpaperListFragment.newInstance(), classTag<WallpaperListFragment>())
+                replace(
+                    R.id.vContent,
+                    WallpaperListFragment.newInstance(),
+                    classTag<WallpaperListFragment>()
+                )
             }
         }
 
-        if(BuildConfig.RELEASE) {
+        if (BuildConfig.RELEASE) {
             RateThisApp.onCreate(this)
             RateThisApp.showRateDialogIfNeeded(this)
         }
@@ -53,7 +56,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        val drawerToggle = ActionBarDrawerToggle(this, vDrawer, vToolbar, R.string.open_menu, R.string.close_menu)
+        val drawerToggle =
+            ActionBarDrawerToggle(this, vDrawer, vToolbar, R.string.open_menu, R.string.close_menu)
         vDrawer.addDrawerListener(drawerToggle)
         vDrawerNav.setNavigationItemSelectedListener(this)
         drawerToggle.syncState()
@@ -63,15 +67,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .loadImage(R.drawable.drawer_header_logo)
 
         with(viewModel) {
-            getAppUpdateAvailable().observe(this@MainActivity, Observer { newVersion ->
+            appUpdateAvailable.observe(this@MainActivity, Observer { newVersion ->
                 if (newVersion)
                     showUpdateAppDialog()
             })
-            getPurchaseCompleted().observe(this@MainActivity, Observer { success ->
+            purchaseCompleted.observe(this@MainActivity, Observer { success ->
                 if (success)
                     Snackbar.make(vRoot, R.string.thanks_for_support, Snackbar.LENGTH_LONG).show()
             })
-            getBillingSupported().observe(this@MainActivity, Observer { supported ->
+            billingSupported.observe(this@MainActivity, Observer { supported ->
                 vDrawerNav.menu
                     .findItem(R.id.nav_donate)
                     .isVisible = supported
@@ -105,11 +109,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_about -> launch(UI) {
+            R.id.nav_about -> launch {
                 delay(300)
                 AboutDialog.show(this@MainActivity)
             }
-            R.id.nav_donate -> launch(UI) {
+            R.id.nav_donate -> launch {
                 delay(300)
                 DonateDialog.show(this@MainActivity)
             }
@@ -120,7 +124,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         return true
     }
 
-    private fun showUpdateAppDialog(){
+    private fun showUpdateAppDialog() {
         AlertDialog.Builder(this)
             .setTitle(R.string.update_available)
             .setMessage(R.string.new_version_available_update_now)
@@ -131,28 +135,28 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             .show()
     }
 
-    private fun shareApp(){
+    private fun shareApp() {
         "${getString(R.string.you_should_try)}\n${App.PLAY_STORE_URL}".share(this)
         Analytics.logShareApp()
     }
 
-    private fun rateApp(){
+    private fun rateApp() {
         showAppInPlayStore()
         Analytics.logRateApp()
     }
 
-    private fun showAppInPlayStore(){
+    private fun showAppInPlayStore() {
         try {
             Uri.parse(App.MARKET_URL).open(this)
             Analytics.logOpenUrl(App.MARKET_URL)
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Uri.parse(App.PLAY_STORE_URL).open(this)
             Analytics.logOpenUrl(App.PLAY_STORE_URL)
         }
     }
 
     @Subscribe
-    fun onEvent(event: DonateEvent){
+    fun onEvent(event: DonateEvent) {
         viewModel.donate(this, event.sku)
         Analytics.logDonate(event.sku)
     }

@@ -1,23 +1,23 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
-import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 
-class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) : AndroidViewModel(app){
+class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) :
+    CoroutineScopedAndroidViewModel(app) {
 
-    private val wallpapers = MutableLiveData<List<Wallpaper>>()
+    private val _wallpapers = MutableLiveData<List<Wallpaper>>()
 
-    fun getWallpapers(): LiveData<List<Wallpaper>> = wallpapers
+    val wallpapers: LiveData<List<Wallpaper>> get() = _wallpapers
 
-    fun loadWallpapers(){
-        launch(UI) {
-            wallpapers.value = wallpaperRepo.getWallpapers()
+    fun loadWallpapers() {
+        launch {
+            _wallpapers.value = wallpaperRepo.getWallpapers()
         }
     }
 

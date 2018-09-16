@@ -23,8 +23,6 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:titleEnabled="false"
-                app:contentScrim="@color/colorPrimaryDark"
                 app:layout_scrollFlags="scroll|snap|enterAlways">
 
                 <androidx.appcompat.widget.Toolbar
@@ -40,7 +38,7 @@
                         android:layout_height="wrap_content"
                         android:text="@string/full_app_name"
                         android:textColor="@android:color/white"
-                        android:textSize="20sp"
+                        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
                         app:textAllCaps="true"
                         app:fontFamily="@font/geonms"/>
 

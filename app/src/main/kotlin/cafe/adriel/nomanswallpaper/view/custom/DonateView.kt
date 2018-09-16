@@ -10,19 +10,19 @@ import cafe.adriel.nomanswallpaper.util.colorFrom
 import cafe.adriel.nomanswallpaper.util.inflate
 import kotlinx.android.synthetic.main.view_donate.view.*
 
-class DonateView(context: Context, attrs: AttributeSet? = null) : RelativeLayout(context, attrs){
+class DonateView(context: Context, attrs: AttributeSet? = null) : RelativeLayout(context, attrs) {
 
     var selectedProductSku = App.PRODUCT_SKU_COFFEE_1
         private set
 
     init {
-        with(inflate(R.layout.view_donate)){
+        inflate(R.layout.view_donate)?.run {
             updateTextColor(v1Coffee, true)
             vSlider.setOnDiscreteSliderChangeListener { selectedPosition ->
                 updateTextColor(v1Coffee, false)
                 updateTextColor(v3Coffee, false)
                 updateTextColor(v5Coffee, false)
-                when(selectedPosition){
+                when (selectedPosition) {
                     0 -> {
                         selectedProductSku = App.PRODUCT_SKU_COFFEE_1
                         updateTextColor(v1Coffee, true)
@@ -40,10 +40,12 @@ class DonateView(context: Context, attrs: AttributeSet? = null) : RelativeLayout
         }
     }
 
-    private fun updateTextColor(view : AppCompatTextView, selected: Boolean){
-        view.setTextColor(context.colorFrom(
-            if(selected) R.color.colorAccent else R.color.grey_400
-        ))
+    private fun updateTextColor(view: AppCompatTextView, selected: Boolean) {
+        view.setTextColor(
+            context.colorFrom(
+                if (selected) R.color.colorAccent else R.color.grey_400
+            )
+        )
     }
 
 }

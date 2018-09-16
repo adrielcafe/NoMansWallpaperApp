@@ -29,8 +29,14 @@ class AboutDialog private constructor(context: Context) : AppCompatDialog(contex
         val projectRepoIcon = context.getDrawable(R.drawable.ic_github).also {
             it?.setTint(Color.WHITE)
         }
-        vProjectRepo.setCompoundDrawablesRelativeWithIntrinsicBounds(projectRepoIcon, null, null, null)
-        vAppVersion.text = "${context.getString(R.string.full_app_name)} v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
+        vProjectRepo.setCompoundDrawablesRelativeWithIntrinsicBounds(
+            projectRepoIcon,
+            null,
+            null,
+            null
+        )
+        vAppVersion.text =
+                "${context.getString(R.string.full_app_name)} v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
 
         vClose.setOnClickListener { dismiss() }
         vEmail.setOnClickListener {
@@ -55,7 +61,7 @@ class AboutDialog private constructor(context: Context) : AppCompatDialog(contex
         }
     }
 
-    private fun sendEmail(){
+    private fun sendEmail() {
         try {
             val email = Uri.parse("mailto:${App.EMAIL}")
             val subject =
@@ -64,7 +70,7 @@ class AboutDialog private constructor(context: Context) : AppCompatDialog(contex
                 putExtra(Intent.EXTRA_SUBJECT, subject)
                 context.startActivity(this)
             }
-        } catch (e: Exception){
+        } catch (e: Exception) {
             Crashlytics.logException(e)
             e.printStackTrace()
             Toast.makeText(context, "Oops! No Email app found :/", Toast.LENGTH_LONG).show()

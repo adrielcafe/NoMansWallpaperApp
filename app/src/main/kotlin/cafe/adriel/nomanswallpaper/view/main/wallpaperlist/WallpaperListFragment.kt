@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedFragment
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.isConnected
@@ -19,13 +20,12 @@ import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.fragment_wallpaper_list.*
 import kotlinx.android.synthetic.main.fragment_wallpaper_list.view.*
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WallpaperListFragment: Fragment() {
+class WallpaperListFragment : CoroutineScopedFragment() {
 
     companion object {
         fun newInstance() = WallpaperListFragment()
@@ -43,13 +43,13 @@ class WallpaperListFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if(!::adapter.isInitialized) {
+        if (!::adapter.isInitialized) {
             adapter = FastItemAdapter()
             adapter.apply {
                 setHasStableIds(true)
                 withOnClickListener { view, _, item, _ ->
-                    view?.vWallpaper?.run {
-                        showWallpaper(this, item.wallpaper)
+                    view?.run {
+                        onListItemClicked(this, item)
                     }
                     true
                 }
@@ -57,7 +57,12 @@ class WallpaperListFragment: Fragment() {
                     override fun onBindMany(viewHolder: RecyclerView.ViewHolder) =
                         viewHolder.itemView.run { listOf(vSet) }
 
-                    override fun onClick(view: View?, position: Int, fastAdapter: FastAdapter<WallpaperAdapterItem>?, item: WallpaperAdapterItem?) {
+                    override fun onClick(
+                        view: View?,
+                        position: Int,
+                        fastAdapter: FastAdapter<WallpaperAdapterItem>?,
+                        item: WallpaperAdapterItem?
+                    ) {
                         if (view != null && item != null) {
                             onListItemClicked(view, item)
                         }
@@ -66,33 +71,25 @@ class WallpaperListFragment: Fragment() {
             }
         }
 
-        with(view){
+        with(view) {
             vRefresh.isRefreshing = true
             vRefresh.setOnRefreshListener {
-                if(isConnected()) listViewModel.loadWallpapers()
+                if (isConnected()) listViewModel.loadWallpapers()
                 else vRefresh.isRefreshing = false
             }
 
             vWallpaperList.adapter = adapter
+            vWallpaperList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    val manager = recyclerView.layoutManager as LinearLayoutManager
+                    vRefresh.isEnabled = manager.findFirstCompletelyVisibleItemPosition() == 0
+                }
+            })
         }
 
-        singleViewModel.getWallpaperUpdated().observe(this, Observer { onWallpaperUpdated(it) })
-        listViewModel.getWallpapers().observe(this, Observer { showWallpapers(it) })
+        singleViewModel.wallpaperUpdated.observe(this, Observer { onWallpaperUpdated(it) })
+        listViewModel.wallpapers.observe(this, Observer { showWallpapers(it) })
         listViewModel.loadWallpapers()
-    }
-
-    private fun onListItemClicked(view: View, item: WallpaperAdapterItem){
-        when(view.id){
-            R.id.vSet -> if(isConnected()) singleViewModel.setWallpaper(item.wallpaper, false)
-        }
-    }
-
-    private fun onWallpaperUpdated(success: Boolean){
-        activity?.run {
-            Snackbar.make(findViewById(R.id.vRoot),
-                if(success) R.string.wallpaper_set else R.string.something_went_wrong,
-                Snackbar.LENGTH_LONG).show()
-        }
     }
 
     override fun onResume() {
@@ -100,10 +97,27 @@ class WallpaperListFragment: Fragment() {
         loadingWallpaper = false
     }
 
-    private fun showWallpapers(wallpapers: List<Wallpaper>){
-        launch(UI) {
+    private fun onListItemClicked(view: View, item: WallpaperAdapterItem) {
+        when (view.id) {
+            R.id.vItemRoot -> showWallpaper(view.vWallpaper, item.wallpaper)
+            R.id.vSet -> if (isConnected()) singleViewModel.setWallpaper(item.wallpaper, false)
+        }
+    }
+
+    private fun onWallpaperUpdated(success: Boolean) {
+        activity?.run {
+            Snackbar.make(
+                findViewById(R.id.vRoot),
+                if (success) R.string.wallpaper_set else R.string.something_went_wrong,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun showWallpapers(wallpapers: List<Wallpaper>) {
+        launch {
             if (wallpapers.isNotEmpty()) {
-                val adapterItems = withContext(CommonPool){
+                val adapterItems = withContext(Dispatchers.Default) {
                     wallpapers.map { WallpaperAdapterItem(it) }
                 }
                 adapter.clear()
@@ -113,8 +127,8 @@ class WallpaperListFragment: Fragment() {
         }
     }
 
-    private fun showWallpaper(view: View, wallpaper: Wallpaper){
-        if(isConnected()) {
+    private fun showWallpaper(view: View, wallpaper: Wallpaper) {
+        if (isConnected()) {
             activity?.run {
                 if (!loadingWallpaper) {
                     loadingWallpaper = true

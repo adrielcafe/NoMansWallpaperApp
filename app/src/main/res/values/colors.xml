@@ -5,15 +5,11 @@
     <color name="colorPrimaryDark">@android:color/black</color>
     <color name="colorAccent">@color/red_900</color>
 
-    <color name="drawer_header_bg">#001319</color>
-
+    <color name="white_transparent">#CFFF</color>
     <color name="red_900">#B71C1C</color>
-
-    <color name="grey_200">#EEEEEE</color>
     <color name="grey_400">#BDBDBD</color>
-    <color name="grey_800">#424242</color>
     <color name="grey_900">#212121</color>
 
-    <color name="white_transparent">#CFFF</color>
+    <color name="drawer_header_bg">#001319</color>
 
 </resources>

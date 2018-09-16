@@ -21,60 +21,60 @@ object Analytics {
 
     private var analytics: FirebaseAnalytics? = null
 
-    fun init(context: Context){
-        if(analytics == null){
+    fun init(context: Context) {
+        if (analytics == null) {
             analytics = FirebaseAnalytics.getInstance(context.applicationContext)
         }
     }
 
-    fun logSetWallpaper(wallpaper: Wallpaper){
+    fun logSetWallpaper(wallpaper: Wallpaper) {
         val params = Bundle().apply {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_SET_WALLPAPER, params)
     }
 
-    fun logDownloadWallpaper(wallpaper: Wallpaper){
+    fun logDownloadWallpaper(wallpaper: Wallpaper) {
         val params = Bundle().apply {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_DOWNLOAD_WALLPAPER, params)
     }
 
-    fun logRateApp(){
+    fun logRateApp() {
         analytics?.logEvent(EVENT_RATE_APP, null)
     }
 
-    fun logShareApp(){
+    fun logShareApp() {
         analytics?.logEvent(EVENT_SHARE_APP, null)
     }
 
-    fun logShareWallpaper(wallpaper: Wallpaper){
+    fun logShareWallpaper(wallpaper: Wallpaper) {
         val params = Bundle().apply {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_SHARE_WALLPAPER, params)
     }
 
-    fun logCopyWallpaperUrl(wallpaper: Wallpaper){
+    fun logCopyWallpaperUrl(wallpaper: Wallpaper) {
         val params = Bundle().apply {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_COPY_WALLPAPER_URL, params)
     }
 
-    fun logSendEmail(){
+    fun logSendEmail() {
         analytics?.logEvent(EVENT_SEND_EMAIL, null)
     }
 
-    fun logOpenUrl(url: String){
+    fun logOpenUrl(url: String) {
         val params = Bundle().apply {
             putString(PARAM_URL, url)
         }
         analytics?.logEvent(EVENT_OPEN_URL, params)
     }
 
-    fun logDonate(sku: String){
+    fun logDonate(sku: String) {
         val params = Bundle().apply {
             putString(PARAM_SKU, sku)
         }

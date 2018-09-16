@@ -5,7 +5,8 @@ import android.content.res.Resources
 import android.util.AttributeSet
 import androidx.appcompat.widget.AppCompatImageView
 
-class WallpaperImageView(context: Context, attrs: AttributeSet? = null) : AppCompatImageView(context, attrs) {
+class WallpaperImageView(context: Context, attrs: AttributeSet? = null) :
+    AppCompatImageView(context, attrs) {
 
     companion object {
         private const val HD_WIDTH = 1080 / 2
