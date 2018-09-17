@@ -47,6 +47,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
             adapter = FastItemAdapter()
             adapter.apply {
                 setHasStableIds(true)
+                withUseIdDistributor(true)
                 withOnClickListener { view, _, item, _ ->
                     view?.run {
                         onListItemClicked(this, item)
@@ -74,8 +75,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
         with(view) {
             vRefresh.isRefreshing = true
             vRefresh.setOnRefreshListener {
-                if (isConnected()) listViewModel.loadWallpapers()
-                else vRefresh.isRefreshing = false
+                listViewModel.loadWallpapers()
             }
 
             vWallpaperList.adapter = adapter
@@ -128,12 +128,10 @@ class WallpaperListFragment : CoroutineScopedFragment() {
     }
 
     private fun showWallpaper(view: View, wallpaper: Wallpaper) {
-        if (isConnected()) {
-            activity?.run {
-                if (!loadingWallpaper) {
-                    loadingWallpaper = true
-                    WallpaperActivity.start(this, wallpaper, view)
-                }
+        activity?.run {
+            if (!loadingWallpaper) {
+                loadingWallpaper = true
+                WallpaperActivity.start(this, wallpaper, view)
             }
         }
     }

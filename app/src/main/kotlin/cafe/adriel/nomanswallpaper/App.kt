@@ -7,6 +7,8 @@ import cafe.adriel.nomanswallpaper.view.main.MainViewModel
 import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListViewModel
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
 import com.github.ajalt.timberkt.Timber
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import org.koin.android.ext.android.startKoin
 import org.koin.android.logger.AndroidLogger
 import org.koin.androidx.viewmodel.ext.koin.viewModel
@@ -47,15 +49,25 @@ class App : Application() {
     override fun onCreate() {
         super.onCreate()
         startKoin(this, listOf(repositoriesModule, viewModelsModule))
-        Analytics.init(this)
         initLogging()
+        initDatabase()
+        Analytics.init(this)
+    }
+
+    private fun initDatabase(){
+        val settings = FirebaseFirestoreSettings.Builder()
+            .setTimestampsInSnapshotsEnabled(true)
+            .build()
+        FirebaseFirestore.getInstance().firestoreSettings = settings
     }
 
     private fun initLogging(){
         if (BuildConfig.RELEASE) {
+            FirebaseFirestore.setLoggingEnabled(false)
             Koin.logger = EmptyLogger()
         } else {
             Timber.plant(Timber.DebugTree())
+            FirebaseFirestore.setLoggingEnabled(true)
             Koin.logger = AndroidLogger()
         }
     }

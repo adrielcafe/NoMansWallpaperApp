@@ -1,6 +1,7 @@
 package cafe.adriel.nomanswallpaper.util
 
 import cafe.adriel.nomanswallpaper.BuildConfig
+import com.crashlytics.android.Crashlytics
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
@@ -22,8 +23,13 @@ object RemoteConfig {
 
     suspend fun load() = withContext(Dispatchers.IO){
         with(remoteConfig.fetch(0)) {
-            Tasks.await(this)
-            if(isSuccessful) remoteConfig.activateFetched()
+            try {
+                Tasks.await(this)
+                if (isSuccessful) remoteConfig.activateFetched()
+            } catch (e: Exception){
+                Crashlytics.logException(e)
+                e.printStackTrace()
+            }
         }
     }
 

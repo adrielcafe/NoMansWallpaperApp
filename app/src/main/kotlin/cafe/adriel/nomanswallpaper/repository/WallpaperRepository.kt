@@ -1,45 +1,38 @@
 package cafe.adriel.nomanswallpaper.repository
 
 import cafe.adriel.nomanswallpaper.model.Wallpaper
+import com.crashlytics.android.Crashlytics
+import com.google.android.gms.tasks.Tasks
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
 
 class WallpaperRepository {
 
-    // TODO dummy data
-    suspend fun getWallpapers() = withContext(Dispatchers.IO) {
-        listOf(
-            Wallpaper(
-                0,
-                "https://nmswp.azureedge.net/wp-content/uploads/2017/02/Diplo.png",
-                "#B95644",
-                "/u/user1"
-            ),
-            Wallpaper(
-                1,
-                "https://nmswp.azureedge.net/wp-content/uploads/2017/02/Fleet.png",
-                "#952074",
-                "@user2"
-            ),
-            Wallpaper(
-                2,
-                "https://nmswp.azureedge.net/wp-content/uploads/2017/02/Walkers.png",
-                "#CFF2B9",
-                "/u/user3"
-            ),
-            Wallpaper(
-                3,
-                "https://nmswp.azureedge.net/wp-content/uploads/2017/02/NightDrone.png",
-                "#2F1631",
-                "@user4"
-            ),
-            Wallpaper(
-                4,
-                "https://nmswp.azureedge.net/wp-content/uploads/2017/02/BlueSpace.png",
-                "#2F395F"
-            )
-        ).shuffled()
+    companion object {
+        private const val COLLECTION_WALLPAPERS = "wallpapers"
+        private const val QUERY_LIMIT = 1000L
+    }
+
+    // https://firestore.googleapis.com/v1beta1/projects/nmw-app/databases/(default)/documents/wallpapers
+    suspend fun getWallpapers(): List<Wallpaper> = withContext(Dispatchers.IO) {
+        val collectionQuery = FirebaseFirestore.getInstance()
+            .collection(COLLECTION_WALLPAPERS)
+            .limit(QUERY_LIMIT)
+            .get()
+        with(collectionQuery) {
+            Tasks.await(this)
+            if(isSuccessful){
+                result.toObjects(Wallpaper::class.java).apply {
+                    shuffle()
+                }
+            } else {
+                Crashlytics.logException(exception)
+                exception?.printStackTrace()
+                emptyList()
+            }
+        }
     }
 
 }

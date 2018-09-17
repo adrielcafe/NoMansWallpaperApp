@@ -15,8 +15,6 @@ import kotlinx.android.synthetic.main.item_wallpaper.view.*
 class WallpaperAdapterItem(val wallpaper: Wallpaper) :
     AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
 
-    override fun getIdentifier() = wallpaper.id
-
     override fun getLayoutRes() = R.layout.item_wallpaper
 
     override fun getType() = layoutRes
@@ -25,9 +23,14 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
 
     override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
         super.bindView(holder, payloads)
-        val mainColor = Color.parseColor(wallpaper.mainColorHex)
+        val mainColor = try {
+            Color.parseColor(wallpaper.mainColorHex)
+        } catch (e: Exception){
+            Color.BLACK
+        }
         val mainColorAlpha = ColorUtils.setAlphaComponent(mainColor, 150)
         with(holder.itemView) {
+            setTag(R.id.vItemRoot, this@WallpaperAdapterItem)
             vWallpaper.loadImage(wallpaper.url, mainColor)
             vDetailsLayout.setBackgroundColor(mainColorAlpha)
             vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"

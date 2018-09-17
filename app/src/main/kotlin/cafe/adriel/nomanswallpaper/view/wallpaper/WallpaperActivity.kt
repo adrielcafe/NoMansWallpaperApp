@@ -70,13 +70,18 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
             getItemById(R.id.opt_copy_url).iconDrawable.setTint(Color.WHITE)
         }
 
-        val mainColor = ColorDrawable(Color.parseColor(wallpaper.mainColorHex))
-        vWallpaper.background = mainColor
+        val mainColor = try {
+            Color.parseColor(wallpaper.mainColorHex)
+        } catch (e: Exception){
+            Color.BLACK
+        }
+        val mainColorDrawable = ColorDrawable(mainColor)
+        vWallpaper.background = mainColorDrawable
 
         supportPostponeEnterTransition()
         GlideApp.with(applicationContext)
             .load(wallpaper.url)
-            .placeholder(mainColor)
+            .placeholder(mainColorDrawable)
             .dontTransform()
             .dontAnimate()
             .listener(object : RequestListener<Drawable> {
