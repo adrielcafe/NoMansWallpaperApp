@@ -63,6 +63,7 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
                 val wallpaperFile = getWallpaperFile(wallpaper)
                 val uri = FileProvider.getUriForFile(context, PROVIDER_AUTHORITY, wallpaperFile)
                 val intent = Intent(Intent.ACTION_SEND).apply {
+                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     putExtra(Intent.EXTRA_STREAM, uri)
                     type = MIME_TYPE_IMAGE
                 }
@@ -93,6 +94,7 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
     fun showWallpaperInGallery(wallpaperUri: String) {
         Intent(Intent.ACTION_VIEW).run {
             try {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 setDataAndType(Uri.parse(wallpaperUri), MIME_TYPE_IMAGE)
                 getApplication<App>().startActivity(this)
             } catch (e: Exception){
@@ -109,6 +111,7 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
             setDataAndType(uri, MIME_TYPE_IMAGE)
             addCategory(Intent.CATEGORY_DEFAULT)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra("mimeType", MIME_TYPE_IMAGE)
         }
         context.startActivity(Intent.createChooser(intent, context.getString(R.string.set_as)))

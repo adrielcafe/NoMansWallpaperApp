@@ -24,6 +24,7 @@
         android:background="?actionBarItemBackground"
         android:src="@drawable/ic_arrow_back"
         android:tint="@android:color/white"
+        android:contentDescription="@string/close"
         android:visibility="invisible"
         tools:visibility="visible"/>
 
@@ -69,6 +70,7 @@
         android:src="@drawable/ic_add"
         android:tint="@android:color/white"
         android:visibility="invisible"
+        android:contentDescription="@string/open_menu"
         app:layout_behavior="cafe.adriel.nomanswallpaper.view.custom.SnackBarAwareBehavior"
         tools:visibility="visible"/>
 
