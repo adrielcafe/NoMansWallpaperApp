@@ -5,6 +5,7 @@ import io.mironov.smuggler.AutoParcelable
 data class Wallpaper(
     val id: String = "",
     val url: String = "",
-    val mainColorHex: String = "#000000",
+    val thumbUrl: String = "",
+    val colorHex: String = "#000000",
     val author: String = ""
 ) : AutoParcelable

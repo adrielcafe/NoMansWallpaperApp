@@ -1,5 +1,6 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.View
 import androidx.core.graphics.ColorUtils
@@ -23,16 +24,21 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
 
     override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
         super.bindView(holder, payloads)
-        val mainColor = try {
-            Color.parseColor(wallpaper.mainColorHex)
+        val imageColor = try {
+            Color.parseColor(wallpaper.colorHex)
         } catch (e: Exception){
             Color.BLACK
         }
-        val mainColorAlpha = ColorUtils.setAlphaComponent(mainColor, 150)
+        val imageColorAlpha = ColorUtils.setAlphaComponent(imageColor, 150)
         with(holder.itemView) {
             setTag(R.id.vItemRoot, this@WallpaperAdapterItem)
-            vWallpaper.loadImage(wallpaper.url, mainColor)
-            vDetailsLayout.setBackgroundColor(mainColorAlpha)
+            if(wallpaper.thumbUrl.isNotBlank()) {
+                vWallpaper.loadImage(wallpaper.thumbUrl, imageColor)
+            } else {
+                vWallpaper.loadImage(wallpaper.url, imageColor)
+            }
+//            vDetailsLayout.setBackgroundColor(imageColorAlpha)
+            vSetLayout.backgroundTintList = ColorStateList.valueOf(imageColor)
             vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"
             vAuthor.compoundDrawablesRelative[0]?.run {
                 setTint(Color.WHITE)

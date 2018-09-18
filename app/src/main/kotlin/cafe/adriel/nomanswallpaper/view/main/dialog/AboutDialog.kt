@@ -1,4 +1,4 @@
-package cafe.adriel.nomanswallpaper.view.main.about
+package cafe.adriel.nomanswallpaper.view.main.dialog
 
 import android.content.Context
 import android.content.Intent
@@ -19,7 +19,9 @@ import kotlinx.android.synthetic.main.dialog_about.*
 class AboutDialog private constructor(context: Context) : AppCompatDialog(context) {
 
     companion object {
-        fun show(context: Context) = AboutDialog(context).show()
+        fun show(context: Context) = AboutDialog(
+            context
+        ).show()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -70,18 +70,19 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
             getItemById(R.id.opt_copy_url).iconDrawable.setTint(Color.WHITE)
         }
 
-        val mainColor = try {
-            Color.parseColor(wallpaper.mainColorHex)
+        val imageUrl = if(wallpaper.thumbUrl.isNotBlank()) wallpaper.thumbUrl else wallpaper.url
+        val imageColor = try {
+            Color.parseColor(wallpaper.colorHex)
         } catch (e: Exception){
             Color.BLACK
         }
-        val mainColorDrawable = ColorDrawable(mainColor)
-        vWallpaper.background = mainColorDrawable
+        val imageColorDrawable = ColorDrawable(imageColor)
+        vWallpaper.background = imageColorDrawable
 
         supportPostponeEnterTransition()
         GlideApp.with(applicationContext)
-            .load(wallpaper.url)
-            .placeholder(mainColorDrawable)
+            .load(imageUrl)
+            .placeholder(imageColorDrawable)
             .dontTransform()
             .dontAnimate()
             .listener(object : RequestListener<Drawable> {
@@ -109,11 +110,11 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
         super.onPostCreate(savedInstanceState)
         vShowOptions.postDelayed({
             vClose.visibility = View.VISIBLE
-            vAuthor.visibility = View.VISIBLE
+//            vAuthor.visibility = View.VISIBLE
             vClose.startAnimation(
                 AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_in))
-            vAuthor.startAnimation(
-                AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
+//            vAuthor.startAnimation(
+//                AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
             vShowOptions.show()
         }, 500)
     }
@@ -191,12 +192,12 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
     private fun exit(backPressed: Boolean = false) {
         vClose.startAnimation(
             AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_out))
-        vAuthor.startAnimation(
-            AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_out))
+//        vAuthor.startAnimation(
+//            AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_out))
         vShowOptions.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onHidden(fab: FloatingActionButton?) {
                 vClose.visibility = View.INVISIBLE
-                vAuthor.visibility = View.INVISIBLE
+//                vAuthor.visibility = View.INVISIBLE
                 if (backPressed) onBackPressed() else finishAfterTransition()
             }
         })

@@ -14,8 +14,8 @@ import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.util.*
-import cafe.adriel.nomanswallpaper.view.main.about.AboutDialog
-import cafe.adriel.nomanswallpaper.view.main.donate.DonateDialog
+import cafe.adriel.nomanswallpaper.view.main.dialog.AboutDialog
+import cafe.adriel.nomanswallpaper.view.main.dialog.DonateDialog
 import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar

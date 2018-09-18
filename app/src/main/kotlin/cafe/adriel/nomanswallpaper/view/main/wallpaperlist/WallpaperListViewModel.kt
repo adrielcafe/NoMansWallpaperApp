@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
+import com.crashlytics.android.Crashlytics
 import kotlinx.coroutines.experimental.launch
 
 class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) :
@@ -17,7 +18,13 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
 
     fun loadWallpapers() {
         launch {
-            _wallpapers.value = wallpaperRepo.getWallpapers()
+            try {
+                _wallpapers.value = wallpaperRepo.getWallpapers()
+            } catch (e: Exception){
+                Crashlytics.logException(e)
+                e.printStackTrace()
+                _wallpapers.value = emptyList()
+            }
         }
     }
 
