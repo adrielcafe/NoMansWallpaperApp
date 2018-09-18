@@ -23,7 +23,7 @@
     <string name="later">Later</string>
     <string name="donate">Donate</string>
     <string name="wallpaper_set">Wallpaper set!</string>
-    <string name="wallpaper_downloaded">Wallpaper saved to your gallery</string>
+    <string name="saved_in_gallery">Saved in your gallery</string>
     <string name="something_went_wrong">Oops! Something went wrong</string>
     <string name="set_wallpaper">Set as Wallpaper</string>
     <string name="set_as">Set as…</string>
@@ -34,5 +34,6 @@
     <string name="connect_internet">Connect to the internet</string>
     <string name="copy_url">Copy URL</string>
     <string name="url_copied_clipboard">URL copied to Clipboard</string>
+    <string name="downloading_wallpaper">Downloading wallpaper…</string>
 
 </resources>

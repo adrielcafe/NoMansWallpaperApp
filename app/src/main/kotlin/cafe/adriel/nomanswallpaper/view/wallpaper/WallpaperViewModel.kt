@@ -92,8 +92,13 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
 
     fun showWallpaperInGallery(wallpaperUri: String) {
         Intent(Intent.ACTION_VIEW).run {
-            setDataAndType(Uri.parse(wallpaperUri), MIME_TYPE_IMAGE)
-            getApplication<App>().startActivity(this)
+            try {
+                setDataAndType(Uri.parse(wallpaperUri), MIME_TYPE_IMAGE)
+                getApplication<App>().startActivity(this)
+            } catch (e: Exception){
+                Crashlytics.logException(e)
+                e.printStackTrace()
+            }
         }
     }
 

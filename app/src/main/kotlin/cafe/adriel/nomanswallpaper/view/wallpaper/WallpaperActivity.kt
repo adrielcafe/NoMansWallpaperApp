@@ -129,18 +129,30 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
 
     override fun onMenuItemSelected(view: View?, id: Int) {
         launch {
-            delay(AnimationHelper.REVEAL_DURATION)
+            val loadingSnackBar = Snackbar.make(vRoot,
+                R.string.downloading_wallpaper, Snackbar.LENGTH_LONG)
+            delay(AnimationHelper.REVEAL_DURATION * 2)
             when (id) {
-                R.id.opt_set_wallpaper ->
-                    if (isConnected()) viewModel.setWallpaper(wallpaper, true)
-                R.id.opt_set_as ->
-                    if (isConnected()) viewModel.setWallpaper(wallpaper, false)
-                R.id.opt_download ->
-                    if (isConnected()) downloadWallpaper(wallpaper)
-                R.id.opt_share ->
+                R.id.opt_set_wallpaper -> if (isConnected()) {
+                    loadingSnackBar.show()
+                    viewModel.setWallpaper(wallpaper, true)
+                }
+                R.id.opt_set_as -> if (isConnected()) {
+                    loadingSnackBar.show()
+                    viewModel.setWallpaper(wallpaper, false)
+                }
+                R.id.opt_download -> if (isConnected()) {
+                    loadingSnackBar.show()
+                    downloadWallpaper(wallpaper)
+                }
+                R.id.opt_share -> if (isConnected()) {
+                    loadingSnackBar.show()
                     viewModel.shareWallpaper(wallpaper)
-                R.id.opt_copy_url ->
+                }
+                R.id.opt_copy_url -> {
+                    loadingSnackBar.dismiss()
                     copyWallpaperUrl(wallpaper)
+                }
             }
         }
     }
@@ -155,11 +167,11 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
 
     private fun onWallpaperDownloaded(wallpaperUri: String) {
         val message = if (wallpaperUri.isNotBlank())
-            R.string.wallpaper_downloaded
+            R.string.saved_in_gallery
         else
             R.string.something_went_wrong
         Snackbar.make(vRoot, message, Snackbar.LENGTH_LONG).run {
-            if (message == R.string.wallpaper_downloaded) {
+            if (message == R.string.saved_in_gallery) {
                 setAction(R.string.open) { viewModel.showWallpaperInGallery(wallpaperUri) }
             }
             show()

@@ -1,9 +1,7 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
-import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.View
-import androidx.core.graphics.ColorUtils
 import androidx.recyclerview.widget.RecyclerView
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
@@ -29,7 +27,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
         } catch (e: Exception){
             Color.BLACK
         }
-        val imageColorAlpha = ColorUtils.setAlphaComponent(imageColor, 150)
+//        val imageColorAlpha = ColorUtils.setAlphaComponent(imageColor, 150)
         with(holder.itemView) {
             setTag(R.id.vItemRoot, this@WallpaperAdapterItem)
             if(wallpaper.thumbUrl.isNotBlank()) {
@@ -38,7 +36,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
                 vWallpaper.loadImage(wallpaper.url, imageColor)
             }
 //            vDetailsLayout.setBackgroundColor(imageColorAlpha)
-            vSetLayout.backgroundTintList = ColorStateList.valueOf(imageColor)
+//            vSetLayout.backgroundTintList = ColorStateList.valueOf(imageColor)
             vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"
             vAuthor.compoundDrawablesRelative[0]?.run {
                 setTint(Color.WHITE)

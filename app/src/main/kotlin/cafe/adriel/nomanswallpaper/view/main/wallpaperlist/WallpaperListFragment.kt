@@ -100,7 +100,13 @@ class WallpaperListFragment : CoroutineScopedFragment() {
     private fun onListItemClicked(view: View, item: WallpaperAdapterItem) {
         when (view.id) {
             R.id.vItemRoot -> showWallpaper(view.vWallpaper, item.wallpaper)
-            R.id.vSet -> if (isConnected()) singleViewModel.setWallpaper(item.wallpaper, false)
+            R.id.vSet ->  activity?.run {
+                if (isConnected()) {
+                    Snackbar.make(findViewById(R.id.vRoot),
+                        R.string.downloading_wallpaper, Snackbar.LENGTH_LONG).show()
+                    singleViewModel.setWallpaper(item.wallpaper, false)
+                }
+            }
         }
     }
 

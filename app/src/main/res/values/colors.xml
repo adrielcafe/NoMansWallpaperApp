@@ -6,6 +6,7 @@
     <color name="colorAccent">@color/red_900</color>
 
     <color name="white_transparent">#CFFF</color>
+    <color name="black_transparent">#5000</color>
     <color name="red_900">#B71C1C</color>
     <color name="grey_400">#BDBDBD</color>
     <color name="grey_900">#212121</color>

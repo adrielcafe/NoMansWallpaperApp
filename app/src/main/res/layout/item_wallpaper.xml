@@ -48,7 +48,7 @@
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:background="@drawable/bg_circle"
-            tools:backgroundTint="@color/colorAccent">
+            android:backgroundTint="@color/black_transparent">
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/vSet"
