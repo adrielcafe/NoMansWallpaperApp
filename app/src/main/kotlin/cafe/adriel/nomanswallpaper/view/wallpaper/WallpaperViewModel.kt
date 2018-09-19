@@ -68,7 +68,7 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
                     type = MIME_TYPE_IMAGE
                 }
                 context.startActivity(
-                    Intent.createChooser(intent, context.getString(R.string.share_with)))
+                    Intent.createChooser(intent, context.getString(R.string.share_with)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 Analytics.logShareWallpaper(wallpaper)
             } catch (e: Exception) {
                 Crashlytics.logException(e)
@@ -114,7 +114,8 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             putExtra("mimeType", MIME_TYPE_IMAGE)
         }
-        context.startActivity(Intent.createChooser(intent, context.getString(R.string.set_as)))
+        context.startActivity(
+            Intent.createChooser(intent, context.getString(R.string.set_as)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
     }
 
     private suspend fun setWallpaper(wallpaperFile: File) = withContext(Dispatchers.IO) {
