@@ -25,6 +25,9 @@ import com.hlab.fabrevealmenu.helper.AnimationHelper
 import com.hlab.fabrevealmenu.listeners.OnFABMenuSelectedListener
 import com.markodevcic.peko.Peko
 import com.markodevcic.peko.rationale.SnackBarRationale
+import com.tinsuke.icekick.extension.freezeInstanceState
+import com.tinsuke.icekick.extension.parcelLateState
+import com.tinsuke.icekick.extension.unfreezeInstanceState
 import kotlinx.android.synthetic.main.activity_wallpaper.*
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
@@ -46,13 +49,16 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
     }
 
     private val viewModel by viewModel<WallpaperViewModel>()
-    private val wallpaper by lazy {
-        intent.getParcelableExtra(EXTRA_WALLPAPER) as Wallpaper
-    }
+    private var wallpaper: Wallpaper by parcelLateState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_wallpaper)
+        unfreezeInstanceState(savedInstanceState)
+
+        intent?.run {
+            wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
+        }
 
         vClose.setOnClickListener { exit() }
         vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"
@@ -117,6 +123,11 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
 //                AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
             vShowOptions.show()
         }, 500)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        freezeInstanceState(outState)
     }
 
     override fun onBackPressed() {
