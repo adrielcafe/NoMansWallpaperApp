@@ -36,5 +36,6 @@
     <string name="copy_url">Copy URL</string>
     <string name="url_copied_clipboard">URL copied to Clipboard</string>
     <string name="downloading_wallpaper">Downloading wallpaper…</string>
+    <string name="app_content_free">This app and all its content are free.\nIf you\'re enjoying and want to support the development, feel free to buy me a ☕.</string>
 
 </resources>

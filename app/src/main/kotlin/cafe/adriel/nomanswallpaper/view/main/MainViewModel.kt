@@ -3,6 +3,7 @@ package cafe.adriel.nomanswallpaper.view.main
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import android.util.Base64
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
@@ -18,8 +19,11 @@ import kotlinx.coroutines.experimental.launch
 class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
     KinAppManager.KinAppListener {
 
+    private val billingPayload by lazy {
+        Base64.encodeToString(BuildConfig.APPLICATION_ID.toByteArray(), Base64.DEFAULT)
+    }
     private val billingManager by lazy {
-        KinAppManager(getApplication(), BuildConfig.APPLICATION_ID)
+        KinAppManager(getApplication(), billingPayload)
     }
     private val _appUpdateAvailable = MutableLiveData<Boolean>()
     private val _purchaseCompleted = MutableLiveData<Boolean>()

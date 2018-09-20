@@ -32,5 +32,6 @@
     <string name="copy_url">Copiar URL</string>
     <string name="url_copied_clipboard">URL copiada para área de transferência</string>
     <string name="downloading_wallpaper">Baixando plano de fundo…</string>
+    <string name="app_content_free">Este aplicativo e todo o seu conteúdo são gratuitos.\nSe você está gostando e quer apoiar o desenvolvimento, fique à vontade para me comprar um ☕.</string>
 
 </resources>

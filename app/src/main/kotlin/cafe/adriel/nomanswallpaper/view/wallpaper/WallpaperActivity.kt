@@ -57,7 +57,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
         unfreezeInstanceState(savedInstanceState)
 
         intent?.run {
-            wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
+            if(hasExtra(EXTRA_WALLPAPER)) wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
         }
 
         vClose.setOnClickListener { exit() }

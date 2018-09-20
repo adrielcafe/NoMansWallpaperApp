@@ -1,6 +1,9 @@
 # NMW
 -keepclasseswithmembers class cafe.adriel.nomanswallpaper.model.** { *; }
 
+# Billing
+-keep class com.android.vending.billing.**
+
 # Kotlin
 -dontwarn kotlin.**
 -dontwarn org.jetbrains.annotations.**
