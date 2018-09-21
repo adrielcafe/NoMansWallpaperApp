@@ -53,18 +53,28 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_wallpaper)
         unfreezeInstanceState(savedInstanceState)
 
-        intent?.run {
-            if(hasExtra(EXTRA_WALLPAPER)) wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
+        setContentView(R.layout.activity_wallpaper)
+
+        if(savedInstanceState == null) {
+            intent?.run {
+                if (hasExtra(EXTRA_WALLPAPER)) {
+                    wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
+                }
+            }
         }
 
         vClose.setOnClickListener { exit() }
-        vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"
-        vAuthor.compoundDrawablesRelative[0]?.run {
-            setTint(Color.BLACK)
-            bounds.inset(2.px, 2.px)
+        if (wallpaper.author.isNotBlank()) {
+            vAuthor.visibility = View.INVISIBLE
+            vAuthor.text = wallpaper.author
+            vAuthor.compoundDrawablesRelative[0]?.run {
+                setTint(Color.BLACK)
+                bounds.inset(2.px, 2.px)
+            }
+        } else {
+            vAuthor.visibility = View.GONE
         }
         with(vOptionsMenu) {
             bindAnchorView(vShowOptions)
@@ -115,12 +125,14 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         vShowOptions.postDelayed({
+            if(vAuthor.visibility != View.GONE) {
+                vAuthor.visibility = View.VISIBLE
+                vAuthor.startAnimation(
+                    AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
+            }
             vClose.visibility = View.VISIBLE
-//            vAuthor.visibility = View.VISIBLE
             vClose.startAnimation(
                 AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_in))
-//            vAuthor.startAnimation(
-//                AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_in))
             vShowOptions.show()
         }, 500)
     }
@@ -215,12 +227,12 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
     private fun exit(backPressed: Boolean = false) {
         vClose.startAnimation(
             AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.fade_out))
-//        vAuthor.startAnimation(
-//            AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_out))
+        vAuthor.startAnimation(
+            AnimationUtils.loadAnimation(this@WallpaperActivity, R.anim.slide_out))
         vShowOptions.hide(object : FloatingActionButton.OnVisibilityChangedListener() {
             override fun onHidden(fab: FloatingActionButton?) {
                 vClose.visibility = View.INVISIBLE
-//                vAuthor.visibility = View.INVISIBLE
+                vAuthor.visibility = View.INVISIBLE
                 if (backPressed) onBackPressed() else finishAfterTransition()
             }
         })

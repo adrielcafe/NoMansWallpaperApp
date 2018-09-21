@@ -1,7 +1,10 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
 import android.graphics.Color
+import android.graphics.drawable.InsetDrawable
 import android.view.View
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
@@ -27,7 +30,6 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
         } catch (e: Exception){
             Color.BLACK
         }
-//        val imageColorAlpha = ColorUtils.setAlphaComponent(imageColor, 150)
         with(holder.itemView) {
             setTag(R.id.vItemRoot, this@WallpaperAdapterItem)
             if(wallpaper.thumbUrl.isNotBlank()) {
@@ -35,12 +37,16 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
             } else {
                 vWallpaper.loadImage(wallpaper.url, imageColor)
             }
-//            vDetailsLayout.setBackgroundColor(imageColorAlpha)
-//            vSetLayout.backgroundTintList = ColorStateList.valueOf(imageColor)
-            vAuthor.text = if (wallpaper.author.isNotBlank()) wallpaper.author else "?"
-            vAuthor.compoundDrawablesRelative[0]?.run {
-                setTint(Color.WHITE)
-                bounds.inset(2.px, 2.px)
+            if (wallpaper.author.isNotBlank()) {
+                vAuthor.visibility = View.VISIBLE
+                vAuthor.text = wallpaper.author
+
+                val userIcon = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_person, null)
+                userIcon?.let {
+                    DrawableCompat.setTint(it, Color.WHITE)
+                    vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(
+                        InsetDrawable(it, 2.px), null, null, null)
+                }
             }
         }
     }
@@ -51,6 +57,8 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
             vWallpaper.clearImage()
             vDetailsLayout.setBackgroundColor(Color.TRANSPARENT)
             vAuthor.text = ""
+            vAuthor.visibility = View.INVISIBLE
+            vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
         }
     }
 

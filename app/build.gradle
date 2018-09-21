@@ -13,8 +13,8 @@ android {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 4
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -85,7 +85,7 @@ dependencies {
     implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.4"
 
     // Util
-    implementation "org.koin:koin-androidx-viewmodel:1.0.0"
+    implementation "org.koin:koin-androidx-viewmodel:1.0.1-alpha-1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
     implementation "org.greenrobot:eventbus:3.1.1"
