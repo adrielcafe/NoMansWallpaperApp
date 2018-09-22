@@ -26,7 +26,7 @@ import com.hlab.fabrevealmenu.listeners.OnFABMenuSelectedListener
 import com.markodevcic.peko.Peko
 import com.markodevcic.peko.rationale.SnackBarRationale
 import com.tinsuke.icekick.extension.freezeInstanceState
-import com.tinsuke.icekick.extension.parcelLateState
+import com.tinsuke.icekick.extension.parcelState
 import com.tinsuke.icekick.extension.unfreezeInstanceState
 import kotlinx.android.synthetic.main.activity_wallpaper.*
 import kotlinx.coroutines.experimental.delay
@@ -49,33 +49,70 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
     }
 
     private val viewModel by viewModel<WallpaperViewModel>()
-    private var wallpaper: Wallpaper by parcelLateState()
+    private var wallpaper: Wallpaper? by parcelState()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         unfreezeInstanceState(savedInstanceState)
-
         setContentView(R.layout.activity_wallpaper)
 
-        if(savedInstanceState == null) {
-            intent?.run {
-                if (hasExtra(EXTRA_WALLPAPER)) {
-                    wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
-                }
+        intent?.run {
+            if (hasExtra(EXTRA_WALLPAPER)) {
+                wallpaper = getParcelableExtra(EXTRA_WALLPAPER)
             }
+        }
+
+        if(wallpaper == null){
+            finish()
+            return
+        }
+
+        wallpaper?.let {
+            if (it.author.isNotBlank()) {
+                vAuthor.visibility = View.INVISIBLE
+                vAuthor.text = it.author
+                vAuthor.compoundDrawablesRelative[0]?.run {
+                    setTint(Color.BLACK)
+                    bounds.inset(2.px, 2.px)
+                }
+            } else {
+                vAuthor.visibility = View.GONE
+            }
+
+            val imageUrl = if(it.thumbUrl.isNotBlank()) it.thumbUrl else it.url
+            val imageColor = try {
+                Color.parseColor(it.colorHex)
+            } catch (e: Exception){
+                Color.BLACK
+            }
+            val imageColorDrawable = ColorDrawable(imageColor)
+            vWallpaper.background = imageColorDrawable
+
+            supportPostponeEnterTransition()
+            GlideApp.with(applicationContext)
+                .load(imageUrl)
+                .placeholder(imageColorDrawable)
+                .dontTransform()
+                .dontAnimate()
+                .listener(object : RequestListener<Drawable> {
+                    override fun onLoadFailed(e: GlideException?, model: Any?,
+                                              target: Target<Drawable>?,
+                                              isFirstResource: Boolean): Boolean {
+                        supportStartPostponedEnterTransition()
+                        return false
+                    }
+
+                    override fun onResourceReady(resource: Drawable?, model: Any?,
+                                                 target: Target<Drawable>?, dataSource: DataSource?,
+                                                 isFirstResource: Boolean): Boolean {
+                        supportStartPostponedEnterTransition()
+                        return false
+                    }
+                })
+                .into(vWallpaper)
         }
 
         vClose.setOnClickListener { exit() }
-        if (wallpaper.author.isNotBlank()) {
-            vAuthor.visibility = View.INVISIBLE
-            vAuthor.text = wallpaper.author
-            vAuthor.compoundDrawablesRelative[0]?.run {
-                setTint(Color.BLACK)
-                bounds.inset(2.px, 2.px)
-            }
-        } else {
-            vAuthor.visibility = View.GONE
-        }
         with(vOptionsMenu) {
             bindAnchorView(vShowOptions)
             setOnFABMenuSelectedListener(this@WallpaperActivity)
@@ -85,38 +122,6 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
             getItemById(R.id.opt_share).iconDrawable.setTint(Color.WHITE)
             getItemById(R.id.opt_copy_url).iconDrawable.setTint(Color.WHITE)
         }
-
-        val imageUrl = if(wallpaper.thumbUrl.isNotBlank()) wallpaper.thumbUrl else wallpaper.url
-        val imageColor = try {
-            Color.parseColor(wallpaper.colorHex)
-        } catch (e: Exception){
-            Color.BLACK
-        }
-        val imageColorDrawable = ColorDrawable(imageColor)
-        vWallpaper.background = imageColorDrawable
-
-        supportPostponeEnterTransition()
-        GlideApp.with(applicationContext)
-            .load(imageUrl)
-            .placeholder(imageColorDrawable)
-            .dontTransform()
-            .dontAnimate()
-            .listener(object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?,
-                                          target: Target<Drawable>?,
-                                          isFirstResource: Boolean): Boolean {
-                    supportStartPostponedEnterTransition()
-                    return false
-                }
-
-                override fun onResourceReady(resource: Drawable?, model: Any?,
-                                             target: Target<Drawable>?, dataSource: DataSource?,
-                                             isFirstResource: Boolean): Boolean {
-                    supportStartPostponedEnterTransition()
-                    return false
-                }
-            })
-            .into(vWallpaper)
 
         viewModel.wallpaperUpdated.observe(this, Observer { onWallpaperUpdated(it) })
         viewModel.wallpaperDownloaded.observe(this, Observer { onWallpaperDownloaded(it) })
@@ -155,26 +160,28 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
             val loadingSnackBar = Snackbar.make(vRoot,
                 R.string.downloading_wallpaper, Snackbar.LENGTH_LONG)
             delay(AnimationHelper.REVEAL_DURATION * 2)
-            when (id) {
-                R.id.opt_set_wallpaper -> if (isConnected()) {
-                    loadingSnackBar.show()
-                    viewModel.setWallpaper(wallpaper, true)
-                }
-                R.id.opt_set_as -> if (isConnected()) {
-                    loadingSnackBar.show()
-                    viewModel.setWallpaper(wallpaper, false)
-                }
-                R.id.opt_download -> if (isConnected()) {
-                    loadingSnackBar.show()
-                    downloadWallpaper(wallpaper)
-                }
-                R.id.opt_share -> if (isConnected()) {
-                    loadingSnackBar.show()
-                    viewModel.shareWallpaper(wallpaper)
-                }
-                R.id.opt_copy_url -> {
-                    loadingSnackBar.dismiss()
-                    copyWallpaperUrl(wallpaper)
+            wallpaper?.let {
+                when (id) {
+                    R.id.opt_set_wallpaper -> if (isConnected()) {
+                        loadingSnackBar.show()
+                        viewModel.setWallpaper(it, true)
+                    }
+                    R.id.opt_set_as -> if (isConnected()) {
+                        loadingSnackBar.show()
+                        viewModel.setWallpaper(it, false)
+                    }
+                    R.id.opt_download -> if (isConnected()) {
+                        loadingSnackBar.show()
+                        downloadWallpaper(it)
+                    }
+                    R.id.opt_share -> if (isConnected()) {
+                        loadingSnackBar.show()
+                        viewModel.shareWallpaper(it)
+                    }
+                    R.id.opt_copy_url -> {
+                        loadingSnackBar.dismiss()
+                        copyWallpaperUrl(it)
+                    }
                 }
             }
         }

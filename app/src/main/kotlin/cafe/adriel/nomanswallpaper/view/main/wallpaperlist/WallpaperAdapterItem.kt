@@ -47,6 +47,9 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
                     vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(
                         InsetDrawable(it, 2.px), null, null, null)
                 }
+            } else {
+                vAuthor.visibility = View.INVISIBLE
+                vAuthor.text = ""
             }
         }
     }
