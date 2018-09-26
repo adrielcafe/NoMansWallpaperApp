@@ -12,6 +12,7 @@ import androidx.work.WorkerParameters
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
+import cafe.adriel.nomanswallpaper.util.GlideApp
 import cafe.adriel.nomanswallpaper.view.main.MainActivity
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
@@ -72,13 +73,22 @@ class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         val pendingIntent= PendingIntent.getActivity(context, 0, openAppIntent, 0)
+
+        val largeIcon = GlideApp.with(context)
+            .asBitmap()
+            .load(R.mipmap.ic_launcher_foreground)
+            .submit()
+            .get()
+
+        val notificationManager = context.getSystemService<NotificationManager>()
         val notification = NotificationCompat.Builder(context, NOTIFICATION_CHANNEL)
+            .setLargeIcon(largeIcon)
             .setSmallIcon(R.drawable.ic_notification)
             .setContentText(context.getString(R.string.new_wallpaper_set))
             .setContentIntent(pendingIntent)
+            .setColor(Color.BLACK)
             .setAutoCancel(true)
             .build()
-        val notificationManager = context.getSystemService<NotificationManager>()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val currentChannel = notificationManager?.getNotificationChannel(NOTIFICATION_CHANNEL)
