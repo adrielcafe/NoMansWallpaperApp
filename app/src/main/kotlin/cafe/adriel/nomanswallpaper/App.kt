@@ -3,6 +3,7 @@ package cafe.adriel.nomanswallpaper
 import android.app.Application
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import cafe.adriel.nomanswallpaper.util.Analytics
+import cafe.adriel.nomanswallpaper.util.Settings
 import cafe.adriel.nomanswallpaper.view.main.MainViewModel
 import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListViewModel
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
@@ -51,6 +52,7 @@ class App : Application() {
         startKoin(this, listOf(repositoriesModule, viewModelsModule))
         initLogging()
         initDatabase()
+        Settings.init(this)
         Analytics.init(this)
     }
 

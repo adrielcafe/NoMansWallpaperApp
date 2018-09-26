@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="start">
+    tools:openDrawer="end">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/vRoot"
@@ -23,26 +23,17 @@
             <com.google.android.material.appbar.CollapsingToolbarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                app:titleEnabled="false"
                 app:layout_scrollFlags="scroll|snap|enterAlways">
 
                 <androidx.appcompat.widget.Toolbar
                     android:id="@+id/vToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
-                    android:transitionName="toolbar"
+                    app:layout_collapseMode="parallax"
                     app:contentInsetStartWithNavigation="0dp"
-                    app:layout_collapseMode="parallax">
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/full_app_name"
-                        android:textColor="@android:color/white"
-                        android:textAppearance="@style/TextAppearance.Widget.AppCompat.Toolbar.Title"
-                        app:textAllCaps="true"
-                        app:fontFamily="@font/geonms"/>
-
-                </androidx.appcompat.widget.Toolbar>
+                    app:titleTextColor="@android:color/white"
+                    tools:title="@string/wallpapers"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
 
@@ -62,7 +53,10 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
+        app:menu="@menu/drawer_nav"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/drawer_nav"/>
+        app:itemIconTint="@android:color/white"
+        app:itemTextColor="@android:color/white"
+        app:itemBackground="@drawable/bg_drawer_item"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

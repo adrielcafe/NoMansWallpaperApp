@@ -27,10 +27,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WallpaperListFragment : CoroutineScopedFragment() {
 
-    companion object {
-        fun newInstance() = WallpaperListFragment()
-    }
-
     private val singleViewModel by viewModel<WallpaperViewModel>()
     private val listViewModel by viewModel<WallpaperListViewModel>()
     private lateinit var adapter: FastItemAdapter<WallpaperAdapterItem>

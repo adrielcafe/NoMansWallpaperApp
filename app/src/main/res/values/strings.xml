@@ -37,5 +37,31 @@
     <string name="url_copied_clipboard">URL copied to Clipboard</string>
     <string name="downloading_wallpaper">Downloading wallpaper…</string>
     <string name="app_content_free">This app and all its content are free.\nIf you\'re enjoying and want to support the development, feel free to buy me a ☕.</string>
+    <string name="wallpapers">Wallpapers</string>
+    <string name="settings">Settings</string>
+    <string name="every_day">Every day</string>
+    <string name="every_week">Every week</string>
+    <string name="every_two_weeks">Every two weeks</string>
+    <string name="every_month">Every month</string>
+    <string name="auto_change_wallpaper">Auto change wallpaper</string>
+    <string name="enabled">Enabled</string>
+    <string name="frequency">Frequency</string>
+    <string name="notifications">Notifications</string>
+    <string name="show_notification">Show notification</string>
+    <string name="new_wallpapers">New wallpapers</string>
+    <string name="new_wallpaper_set">A new wallpaper has been set</string>
+
+    <string-array name="preference_auto_set_entries">
+        <item>@string/every_day</item>
+        <item>@string/every_week</item>
+        <item>@string/every_two_weeks</item>
+        <item>@string/every_month</item>
+    </string-array>
+    <string-array name="preference_auto_set_values">
+        <item>1</item>
+        <item>7</item>
+        <item>14</item>
+        <item>30</item>
+    </string-array>
 
 </resources>

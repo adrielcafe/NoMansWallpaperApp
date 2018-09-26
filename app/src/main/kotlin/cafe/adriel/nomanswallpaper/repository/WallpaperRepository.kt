@@ -24,9 +24,11 @@ class WallpaperRepository {
         with(collectionQuery) {
             Tasks.await(this)
             if(isSuccessful){
-                FirebaseFirestore.getInstance().disableNetwork()
                 result.toObjects(Wallpaper::class.java).apply {
-                    shuffle()
+                    if(isNotEmpty()){
+                        shuffle()
+                        FirebaseFirestore.getInstance().disableNetwork()
+                    }
                 }
             } else {
                 Crashlytics.logException(exception)

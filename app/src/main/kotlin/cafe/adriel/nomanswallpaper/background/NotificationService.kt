@@ -1,4 +1,4 @@
-package cafe.adriel.nomanswallpaper.service
+package cafe.adriel.nomanswallpaper.background
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService

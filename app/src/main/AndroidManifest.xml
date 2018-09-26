@@ -43,7 +43,7 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
-        <service android:name=".service.NotificationService">
+        <service android:name=".background.NotificationService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>

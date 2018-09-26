@@ -1,6 +1,7 @@
 package cafe.adriel.nomanswallpaper.view.main
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -16,9 +17,11 @@ import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.util.*
 import cafe.adriel.nomanswallpaper.view.main.dialog.AboutDialog
 import cafe.adriel.nomanswallpaper.view.main.dialog.DonateDialog
+import cafe.adriel.nomanswallpaper.view.main.settings.SettingsFragment
 import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListFragment
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.firestore.FirebaseFirestore
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
@@ -31,37 +34,32 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val viewModel by viewModel<MainViewModel>()
+    private val wallpaperListFrag by lazy { WallpaperListFragment() }
+    private val settingsFrag by lazy { SettingsFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(vToolbar)
-        supportActionBar?.setDisplayShowTitleEnabled(false)
-
-        if (savedInstanceState == null) {
-            supportFragmentManager.transaction {
-                replace(
-                    R.id.vContent,
-                    WallpaperListFragment.newInstance(),
-                    classTag<WallpaperListFragment>()
-                )
-            }
-        }
 
         if (BuildConfig.RELEASE) {
             RateThisApp.onCreate(this)
             RateThisApp.showRateDialogIfNeeded(this)
         }
+
+        FirebaseFirestore.getInstance().enableNetwork()
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        val drawerToggle =
-            ActionBarDrawerToggle(this, vDrawer, vToolbar, R.string.open_menu, R.string.close_menu)
-        vDrawer.addDrawerListener(drawerToggle)
+        val drawerToggle = ActionBarDrawerToggle(this, vDrawer, vToolbar, R.string.open_menu, R.string.close_menu)
         vDrawerNav.setNavigationItemSelectedListener(this)
+        vDrawer.addDrawerListener(drawerToggle)
+        drawerToggle.drawerArrowDrawable.color = Color.WHITE
         drawerToggle.syncState()
 
+        vDrawerNav.menu.getItem(0).isChecked = true
+        vDrawerNav.menu.performIdentifierAction(R.id.nav_wallpapers, 0)
         vDrawerNav.getHeaderView(0)
             .vDrawerHeaderLogo
             .loadImage(R.drawable.drawer_header_logo)
@@ -109,6 +107,18 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.nav_wallpapers -> {
+                vToolbar.title = getString(R.string.wallpapers)
+                supportFragmentManager.transaction {
+                    replace(R.id.vContent, wallpaperListFrag, classTag<WallpaperListFragment>())
+                }
+            }
+            R.id.nav_settings -> {
+                vToolbar.title = getString(R.string.settings)
+                supportFragmentManager.transaction {
+                    replace(R.id.vContent, settingsFrag, classTag<SettingsFragment>())
+                }
+            }
             R.id.nav_about -> launch {
                 delay(300)
                 AboutDialog.show(this@MainActivity)

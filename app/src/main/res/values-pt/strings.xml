@@ -33,5 +33,18 @@
     <string name="url_copied_clipboard">URL copiada para área de transferência</string>
     <string name="downloading_wallpaper">Baixando plano de fundo…</string>
     <string name="app_content_free">Este aplicativo e todo o seu conteúdo são gratuitos.\nSe você está gostando e quer apoiar o desenvolvimento, fique à vontade para comprar-me um ☕.</string>
+    <string name="wallpapers">Planos de Fundo</string>
+    <string name="settings">Configurações</string>
+    <string name="every_day">Todo dia</string>
+    <string name="every_week">Toda semana</string>
+    <string name="every_two_weeks">A cada duas semanas</string>
+    <string name="every_month">Todo mês</string>
+    <string name="auto_change_wallpaper">Plano de fundo automático</string>
+    <string name="enabled">Habilitado</string>
+    <string name="frequency">Frequência</string>
+    <string name="notifications">Notificações</string>
+    <string name="show_notification">Mostrar notificação</string>
+    <string name="new_wallpapers">Novos planos de fundo</string>
+    <string name="new_wallpaper_set">Um novo plano de fundo foi definido</string>
 
 </resources>

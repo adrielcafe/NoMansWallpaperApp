@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/notifications">
+
+        <SwitchPreferenceCompat
+            android:key="notifications"
+            android:title="@string/new_wallpapers"
+            android:defaultValue="true"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/auto_change_wallpaper">
+
+        <SwitchPreferenceCompat
+            android:key="auto_change"
+            android:title="@string/enabled"
+            android:defaultValue="false"/>
+
+        <DropDownPreference
+            android:key="auto_change_frequency"
+            android:title="@string/frequency"
+            android:summary="%s"
+            android:entries="@array/preference_auto_set_entries"
+            android:entryValues="@array/preference_auto_set_values"
+            android:defaultValue="7"
+            android:dependency="auto_change"/>
+
+        <CheckBoxPreference
+            android:key="auto_change_notification"
+            android:title="@string/show_notification"
+            android:defaultValue="true"
+            android:dependency="auto_change"/>
+
+    </PreferenceCategory>
+
+</androidx.preference.PreferenceScreen>
