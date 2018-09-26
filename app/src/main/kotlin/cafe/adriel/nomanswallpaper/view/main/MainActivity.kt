@@ -8,7 +8,8 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.transaction
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
 import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
 import cafe.adriel.nomanswallpaper.App
@@ -34,8 +35,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val viewModel by viewModel<MainViewModel>()
-    private val wallpaperListFrag by lazy { WallpaperListFragment() }
-    private val settingsFrag by lazy { SettingsFragment() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +62,10 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         vDrawerNav.getHeaderView(0)
             .vDrawerHeaderLogo
             .loadImage(R.drawable.drawer_header_logo)
+
+        val adapter = SectionsPagerAdapter(supportFragmentManager)
+        vContent.adapter = adapter
+        vContent.offscreenPageLimit = adapter.count
 
         with(viewModel) {
             appUpdateAvailable.observe(this@MainActivity, Observer { newVersion ->
@@ -107,18 +110,8 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_wallpapers -> {
-                vToolbar.title = getString(R.string.wallpapers)
-                supportFragmentManager.transaction {
-                    replace(R.id.vContent, wallpaperListFrag, classTag<WallpaperListFragment>())
-                }
-            }
-            R.id.nav_settings -> {
-                vToolbar.title = getString(R.string.settings)
-                supportFragmentManager.transaction {
-                    replace(R.id.vContent, settingsFrag, classTag<SettingsFragment>())
-                }
-            }
+            R.id.nav_wallpapers -> showWallpapers()
+            R.id.nav_settings -> showSettings()
             R.id.nav_about -> launch {
                 delay(300)
                 AboutDialog.show(this@MainActivity)
@@ -155,6 +148,16 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         Analytics.logRateApp()
     }
 
+    private fun showWallpapers() {
+        vToolbar.title = getString(R.string.wallpapers)
+        vContent.currentItem = 0
+    }
+
+    private fun showSettings() {
+        vToolbar.title = getString(R.string.settings)
+        vContent.currentItem = 1
+    }
+
     private fun showAppInPlayStore() {
         try {
             Uri.parse(App.MARKET_URL).open(this)
@@ -169,6 +172,19 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
     fun onEvent(event: DonateEvent) {
         viewModel.donate(this, event.sku)
         Analytics.logDonate(event.sku)
+    }
+
+    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+
+        private val sections by lazy { listOf(
+            WallpaperListFragment(),
+            SettingsFragment())
+        }
+
+        override fun getItem(position: Int) = sections[position]
+
+        override fun getCount() = sections.size
+
     }
 
 }

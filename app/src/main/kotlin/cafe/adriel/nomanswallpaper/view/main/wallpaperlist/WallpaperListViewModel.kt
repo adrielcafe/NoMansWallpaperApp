@@ -16,6 +16,10 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
 
     val wallpapers: LiveData<List<Wallpaper>> get() = _wallpapers
 
+    init {
+        loadWallpapers()
+    }
+
     fun loadWallpapers() {
         launch {
             try {

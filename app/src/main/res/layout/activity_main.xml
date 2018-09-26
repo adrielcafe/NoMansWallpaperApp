@@ -39,7 +39,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <FrameLayout
+        <cafe.adriel.nomanswallpaper.view.custom.NonSwipeableViewPager
             android:id="@+id/vContent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
