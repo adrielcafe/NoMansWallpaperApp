@@ -52,7 +52,6 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
     }
 
     private fun setAutoChangeEnabled(enabled: Boolean, frequency: Int, showNotification: Boolean){
-        WorkManager.getInstance().cancelAllWorkByTag(WallpaperWorker.TAG)
         if(enabled){
             val data = workDataOf(WallpaperWorker.PARAM_SHOW_NOTIFICATION to showNotification)
             val constraints = Constraints.Builder()
@@ -65,6 +64,8 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
                 .build()
             WorkManager.getInstance().enqueueUniquePeriodicWork(
                 WallpaperWorker.TAG, ExistingPeriodicWorkPolicy.REPLACE, work)
+        } else {
+            WorkManager.getInstance().cancelAllWorkByTag(WallpaperWorker.TAG)
         }
     }
 

@@ -1,5 +1,6 @@
 # NMW
 -keepclasseswithmembers class cafe.adriel.nomanswallpaper.model.** { *; }
+-keepclasseswithmembers class cafe.adriel.nomanswallpaper.background.WallpaperWorker { *; }
 
 # Billing
 -keep class com.android.vending.billing.**
