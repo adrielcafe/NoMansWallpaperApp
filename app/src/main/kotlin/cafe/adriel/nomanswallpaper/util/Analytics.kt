@@ -7,6 +7,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 
 object Analytics {
     private const val EVENT_SET_WALLPAPER = "set_wallpaper"
+    private const val EVENT_AUTO_CHANGE_WALLPAPER = "auto_change_wallpaper"
     private const val EVENT_DOWNLOAD_WALLPAPER = "download_wallpaper"
     private const val EVENT_SHARE_WALLPAPER = "share_wallpaper"
     private const val EVENT_COPY_WALLPAPER_URL = "copy_wallpaper_url"
@@ -32,6 +33,10 @@ object Analytics {
             putString(PARAM_URL, wallpaper.url)
         }
         analytics?.logEvent(EVENT_SET_WALLPAPER, params)
+    }
+
+    fun logAutoChangeWallpaper() {
+        analytics?.logEvent(EVENT_AUTO_CHANGE_WALLPAPER, null)
     }
 
     fun logDownloadWallpaper(wallpaper: Wallpaper) {

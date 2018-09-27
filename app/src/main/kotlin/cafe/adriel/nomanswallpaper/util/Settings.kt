@@ -64,6 +64,7 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
                 .build()
             WorkManager.getInstance().enqueueUniquePeriodicWork(
                 WallpaperWorker.TAG, ExistingPeriodicWorkPolicy.REPLACE, work)
+            Analytics.logAutoChangeWallpaper()
         } else {
             WorkManager.getInstance().cancelAllWorkByTag(WallpaperWorker.TAG)
         }
