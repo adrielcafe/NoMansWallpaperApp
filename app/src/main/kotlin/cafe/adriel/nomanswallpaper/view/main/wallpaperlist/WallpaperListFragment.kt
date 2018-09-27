@@ -13,7 +13,6 @@ import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.isConnected
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperActivity
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
-import com.github.ajalt.timberkt.e
 import com.google.android.material.snackbar.Snackbar
 import com.mikepenz.fastadapter.FastAdapter
 import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter

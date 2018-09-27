@@ -23,7 +23,6 @@ import androidx.fragment.app.Fragment
 import cafe.adriel.nomanswallpaper.R
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.crashlytics.android.Crashlytics
-import org.greenrobot.eventbus.EventBus
 
 // General
 val Int.dp: Int
@@ -31,6 +30,8 @@ val Int.dp: Int
 
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
+
+fun <T> classTag(): String = T::class.java.simpleName
 
 fun String.share(activity: Activity) =
     ShareCompat.IntentBuilder
@@ -46,10 +47,6 @@ fun String.copyToClipboard(context: Context) = try {
 } catch (e: java.lang.Exception) {
     false
 }
-
-fun <T> classTag(): String = T::class.java.simpleName
-
-fun postEvent(event: Any) = EventBus.getDefault().post(event)
 
 // Context
 fun Context.colorFrom(@ColorRes colorRes: Int) = ResourcesCompat.getColor(resources, colorRes, theme)

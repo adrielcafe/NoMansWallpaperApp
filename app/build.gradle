@@ -4,7 +4,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
-apply plugin: 'io.mironov.smuggler'
 apply plugin: 'com.github.ben-manes.versions'
 
 android {
@@ -13,8 +12,8 @@ android {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 6
-        versionName "1.0.5"
+        versionCode 7
+        versionName "1.1.0"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -41,11 +40,21 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
     dexOptions {
-        javaMaxHeapSize '8g'
+        preDexLibraries true
+        maxProcessCount 8
     }
     lintOptions {
         disable 'ParcelCreator'
     }
+}
+
+kapt {
+    useBuildCache = true
+}
+
+androidExtensions {
+    experimental = true
+    defaultCacheImplementation = "SPARSE_ARRAY"
 }
 
 dependencies {
@@ -53,7 +62,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.26.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0"
     implementation 'com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.0'
     implementation 'com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.0'
 
@@ -74,9 +83,9 @@ dependencies {
     implementation "com.google.firebase:firebase-analytics:16.0.3"
     implementation "com.google.firebase:firebase-config:16.0.0"
     implementation "com.google.firebase:firebase-perf:16.0.0"
-    implementation "com.google.firebase:firebase-messaging:17.3.1"
+    implementation "com.google.firebase:firebase-messaging:17.3.2"
     implementation "com.google.firebase:firebase-firestore:17.1.0"
-    implementation "com.crashlytics.sdk.android:crashlytics:2.9.3"
+    implementation "com.crashlytics.sdk.android:crashlytics:2.9.5"
 
     // View
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
@@ -92,7 +101,6 @@ dependencies {
     implementation "org.koin:koin-androidx-viewmodel:1.0.1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
-    implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.StephenVinouze:KinApp:1.0.2"
     implementation "com.markodevcic.peko:peko:0.32"
 }

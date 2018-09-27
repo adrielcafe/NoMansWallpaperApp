@@ -8,6 +8,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
 import cafe.adriel.nomanswallpaper.BuildConfig
+import cafe.adriel.nomanswallpaper.util.Analytics
 import cafe.adriel.nomanswallpaper.util.RemoteConfig
 import com.crashlytics.android.Crashlytics
 import com.github.stephenvinouze.core.managers.KinAppManager
@@ -80,8 +81,10 @@ class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
 
     fun donate(activity: Activity, sku: String) {
         if (BuildConfig.RELEASE) {
-            if (sku.isNotBlank())
+            if (sku.isNotBlank()) {
                 billingManager.purchase(activity, sku, KinAppProductType.INAPP)
+                Analytics.logDonate(sku)
+            }
         } else {
             billingManager.purchase(
                 activity,

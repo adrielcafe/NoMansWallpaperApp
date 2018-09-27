@@ -159,7 +159,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
         launch {
             val loadingSnackBar = Snackbar.make(vRoot,
                 R.string.downloading_wallpaper, Snackbar.LENGTH_LONG)
-            delay(AnimationHelper.REVEAL_DURATION * 2)
+            delay((AnimationHelper.REVEAL_DURATION * 2).toLong())
             wallpaper?.let {
                 when (id) {
                     R.id.opt_set_wallpaper -> if (isConnected()) {

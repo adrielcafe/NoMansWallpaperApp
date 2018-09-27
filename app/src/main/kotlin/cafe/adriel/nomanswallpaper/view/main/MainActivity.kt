@@ -15,7 +15,10 @@ import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
 import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
-import cafe.adriel.nomanswallpaper.util.*
+import cafe.adriel.nomanswallpaper.util.Analytics
+import cafe.adriel.nomanswallpaper.util.loadImage
+import cafe.adriel.nomanswallpaper.util.open
+import cafe.adriel.nomanswallpaper.util.share
 import cafe.adriel.nomanswallpaper.view.main.dialog.AboutDialog
 import cafe.adriel.nomanswallpaper.view.main.dialog.DonateDialog
 import cafe.adriel.nomanswallpaper.view.main.settings.SettingsFragment
@@ -26,13 +29,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.kobakei.ratethisapp.RateThisApp
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : CoroutineScopedActivity(),
+    NavigationView.OnNavigationItemSelectedListener, DonateDialog.OnDonateListener {
 
     private val viewModel by viewModel<MainViewModel>()
 
@@ -92,14 +92,12 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
+    override fun onResume() {
+        super.onResume()
+        when(vContent?.currentItem){
+            0 -> goToWallpapers()
+            1 -> goToSettings()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -110,21 +108,21 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.nav_wallpapers -> showWallpapers()
-            R.id.nav_settings -> showSettings()
-            R.id.nav_about -> launch {
-                delay(300)
-                AboutDialog.show(this@MainActivity)
-            }
-            R.id.nav_donate -> launch {
-                delay(300)
-                DonateDialog.show(this@MainActivity)
-            }
+            R.id.nav_wallpapers -> goToWallpapers()
+            R.id.nav_settings -> goToSettings()
+            R.id.nav_about -> AboutDialog.show(this@MainActivity)
+            R.id.nav_donate -> DonateDialog.show(this@MainActivity)
             R.id.nav_share -> shareApp()
             R.id.nav_rate -> rateApp()
         }
-        vDrawer.closeDrawer(GravityCompat.START)
+        vDrawer.postDelayed({
+            vDrawer.closeDrawer(GravityCompat.START)
+        }, 100)
         return true
+    }
+
+    override fun onDonate(sku: String) {
+        viewModel.donate(this, sku)
     }
 
     private fun showUpdateAppDialog() {
@@ -148,12 +146,12 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         Analytics.logRateApp()
     }
 
-    private fun showWallpapers() {
+    private fun goToWallpapers() {
         vToolbar.title = getString(R.string.wallpapers)
         vContent.currentItem = 0
     }
 
-    private fun showSettings() {
+    private fun goToSettings() {
         vToolbar.title = getString(R.string.settings)
         vContent.currentItem = 1
     }
@@ -166,12 +164,6 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
             Uri.parse(App.PLAY_STORE_URL).open(this)
             Analytics.logOpenUrl(App.PLAY_STORE_URL)
         }
-    }
-
-    @Subscribe
-    fun onEvent(event: DonateEvent) {
-        viewModel.donate(this, event.sku)
-        Analytics.logDonate(event.sku)
     }
 
     inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {

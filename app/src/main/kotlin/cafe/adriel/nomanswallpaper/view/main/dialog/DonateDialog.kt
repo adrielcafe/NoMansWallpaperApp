@@ -4,9 +4,7 @@ import android.content.Context
 import androidx.appcompat.app.AlertDialog
 import androidx.core.graphics.drawable.DrawableCompat
 import cafe.adriel.nomanswallpaper.R
-import cafe.adriel.nomanswallpaper.util.DonateEvent
 import cafe.adriel.nomanswallpaper.util.colorFrom
-import cafe.adriel.nomanswallpaper.util.postEvent
 import cafe.adriel.nomanswallpaper.util.px
 import cafe.adriel.nomanswallpaper.view.custom.DonateView
 
@@ -20,11 +18,8 @@ class DonateDialog private constructor() {
                 .setView(donateView)
                 .setNegativeButton(R.string.later, null)
                 .setPositiveButton(R.string.donate) { _, _ ->
-                    postEvent(
-                        DonateEvent(
-                            donateView.selectedProductSku
-                        )
-                    )
+                    val listener = context as OnDonateListener?
+                    listener?.onDonate(donateView.selectedProductSku)
                 }
                 .create()
                 .run {
@@ -45,6 +40,10 @@ class DonateDialog private constructor() {
                     show()
                 }
         }
+    }
+
+    interface OnDonateListener {
+        fun onDonate(sku: String)
     }
 
 }

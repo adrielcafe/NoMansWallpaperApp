@@ -6,7 +6,7 @@ buildscript {
     ext.ktxVersion = '1.0.0'
     ext.workVersion = '1.0.0-alpha09'
     ext.glideVersion = '4.8.0'
-    ext.fastAdapterVersion = '3.3.0'
+    ext.fastAdapterVersion = '3.3.1'
 
     repositories {
         google()
@@ -15,12 +15,11 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha11'
+        classpath 'com.android.tools.build:gradle:3.3.0-alpha12'
         classpath "com.google.gms:google-services:4.0.2"
         classpath "com.google.firebase:firebase-plugins:1.1.5"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "io.fabric.tools:gradle:1.25.4"
-        classpath "io.mironov.smuggler:smuggler-plugin:0.14.0"
+        classpath "io.fabric.tools:gradle:1.26.0"
         classpath "com.github.ben-manes:gradle-versions-plugin:0.20.0"
     }
 }

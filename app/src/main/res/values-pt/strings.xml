@@ -39,7 +39,7 @@
     <string name="every_week">Toda semana</string>
     <string name="every_two_weeks">A cada duas semanas</string>
     <string name="every_month">Todo mês</string>
-    <string name="auto_change_wallpaper">Plano de fundo automático</string>
+    <string name="auto_change_wallpaper">Plano de fundo automático (BETA)</string>
     <string name="enabled">Habilitado</string>
     <string name="frequency">Frequência</string>
     <string name="notifications">Notificações</string>
