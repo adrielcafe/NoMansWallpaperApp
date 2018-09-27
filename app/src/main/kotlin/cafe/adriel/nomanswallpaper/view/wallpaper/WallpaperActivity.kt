@@ -79,7 +79,10 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
                 vAuthor.visibility = View.GONE
             }
 
-            val imageUrl = if(it.thumbUrl.isNotBlank()) it.thumbUrl else it.url
+            val imageUrl = if(it.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(this))
+                it.thumbUrl
+            else
+                it.url
             val imageColor = try {
                 Color.parseColor(it.colorHex)
             } catch (e: Exception){

@@ -50,6 +50,8 @@
     <string name="show_notification">Show notification</string>
     <string name="new_wallpapers">New wallpapers</string>
     <string name="new_wallpaper_set">A new wallpaper has been set</string>
+    <string name="general">General</string>
+    <string name="high_quality_preview">High quality preview</string>
 
     <string-array name="preference_auto_set_entries">
         <item>@string/every_day</item>

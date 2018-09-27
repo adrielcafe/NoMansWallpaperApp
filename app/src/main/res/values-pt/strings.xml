@@ -46,5 +46,7 @@
     <string name="show_notification">Mostrar notificação</string>
     <string name="new_wallpapers">Novos planos de fundo</string>
     <string name="new_wallpaper_set">Um novo plano de fundo foi definido</string>
+    <string name="general">Geral</string>
+    <string name="high_quality_preview">Pré-visualização de alta qualidade</string>
 
 </resources>

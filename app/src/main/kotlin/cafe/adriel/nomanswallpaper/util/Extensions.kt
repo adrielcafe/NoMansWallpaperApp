@@ -5,6 +5,7 @@ import android.content.*
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.graphics.drawable.Drawable
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.net.ConnectivityManager
 import android.net.Uri
@@ -22,6 +23,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import cafe.adriel.nomanswallpaper.R
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestListener
 import com.crashlytics.android.Crashlytics
 
 // General
@@ -76,11 +78,12 @@ fun Uri.open(context: Context, showErrorMessage: Boolean = true) = try {
 fun ViewGroup.inflate(@LayoutRes resId: Int): View? =
     context.getSystemService<LayoutInflater>()?.inflate(resId, this, true)
 
-fun ImageView.loadImage(url: Any, @ColorInt placeholderColor: Int = Color.TRANSPARENT) =
+fun ImageView.loadImage(url: Any, @ColorInt placeholderColor: Int = Color.TRANSPARENT, listener: RequestListener<Drawable>? = null) =
     GlideApp.with(context.applicationContext)
         .load(url)
         .placeholder(ColorDrawable(placeholderColor))
         .transition(DrawableTransitionOptions.withCrossFade())
+        .listener(listener)
         .into(this)
 
 fun ImageView.clearImage() = GlideApp.with(context.applicationContext).clear(this)

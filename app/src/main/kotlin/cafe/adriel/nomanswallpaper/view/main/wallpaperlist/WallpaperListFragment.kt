@@ -30,7 +30,6 @@ class WallpaperListFragment : CoroutineScopedFragment() {
     private val singleViewModel by viewModel<WallpaperViewModel>()
     private val listViewModel by viewModel<WallpaperListViewModel>()
     private lateinit var adapter: FastItemAdapter<WallpaperAdapterItem>
-    private var loadingWallpaper = false
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_wallpaper_list, container, false)
@@ -87,16 +86,13 @@ class WallpaperListFragment : CoroutineScopedFragment() {
         listViewModel.wallpapers.observe(this, Observer { showWallpapers(it) })
     }
 
-    override fun onResume() {
-        super.onResume()
-        loadingWallpaper = false
-    }
-
     private fun onListItemClicked(view: View, item: WallpaperAdapterItem) {
         when (view.id) {
-            R.id.vItemRoot -> showWallpaper(view.vWallpaper, item.wallpaper)
+            R.id.vItemRoot -> {
+                if(item.imageLoaded) showWallpaper(view.vWallpaper, item.wallpaper)
+            }
             R.id.vSet ->  activity?.run {
-                if (isConnected()) {
+                if (item.imageLoaded && isConnected()) {
                     Snackbar.make(findViewById(R.id.vRoot),
                         R.string.downloading_wallpaper, Snackbar.LENGTH_LONG).show()
                     singleViewModel.setWallpaper(item.wallpaper, false)
@@ -130,10 +126,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
 
     private fun showWallpaper(view: View, wallpaper: Wallpaper) {
         activity?.run {
-            if (!loadingWallpaper) {
-                loadingWallpaper = true
-                WallpaperActivity.start(this, wallpaper, view)
-            }
+            WallpaperActivity.start(this, wallpaper, view)
         }
     }
 
