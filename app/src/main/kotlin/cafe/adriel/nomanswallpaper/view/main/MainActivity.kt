@@ -149,11 +149,13 @@ class MainActivity : CoroutineScopedActivity(),
     private fun goToWallpapers() {
         vToolbar.title = getString(R.string.wallpapers)
         vContent.currentItem = 0
+        vDrawerNav.menu.getItem(0).isChecked = true
     }
 
     private fun goToSettings() {
         vToolbar.title = getString(R.string.settings)
         vContent.currentItem = 1
+        vDrawerNav.menu.getItem(1).isChecked = true
     }
 
     private fun showAppInPlayStore() {
