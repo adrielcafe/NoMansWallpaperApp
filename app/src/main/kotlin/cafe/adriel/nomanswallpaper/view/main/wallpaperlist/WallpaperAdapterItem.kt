@@ -7,6 +7,7 @@ import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.Settings
@@ -39,13 +40,18 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
             Color.BLACK
         }
         with(holder.itemView) {
-            setTag(R.id.vItemRoot, this@WallpaperAdapterItem)
-
             val imageUrl = if(wallpaper.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(context))
                 wallpaper.thumbUrl
             else
                 wallpaper.url
-            vWallpaper.loadImage(imageUrl, imageColor, object : RequestListener<Drawable> {
+            val placeholder = CircularProgressDrawable(context).apply {
+                centerRadius = 25f
+                strokeWidth = 5f
+                setColorSchemeColors(Color.WHITE)
+                start()
+            }
+            vWallpaper.setBackgroundColor(imageColor)
+            vWallpaper.loadImage(imageUrl, placeholder, object : RequestListener<Drawable> {
                 override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
                                           isFirstResource: Boolean): Boolean {
                     imageLoaded = false

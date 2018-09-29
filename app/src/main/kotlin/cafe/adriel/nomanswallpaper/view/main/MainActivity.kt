@@ -61,7 +61,7 @@ class MainActivity : CoroutineScopedActivity(),
         vDrawerNav.menu.performIdentifierAction(R.id.nav_wallpapers, 0)
         vDrawerNav.getHeaderView(0)
             .vDrawerHeaderLogo
-            .loadImage(R.drawable.drawer_header_logo)
+            .loadImage(R.drawable.drawer_header_logo, null)
 
         val adapter = SectionsPagerAdapter(supportFragmentManager)
         vContent.adapter = adapter

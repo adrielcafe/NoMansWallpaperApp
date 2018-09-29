@@ -78,10 +78,13 @@ fun Uri.open(context: Context, showErrorMessage: Boolean = true) = try {
 fun ViewGroup.inflate(@LayoutRes resId: Int): View? =
     context.getSystemService<LayoutInflater>()?.inflate(resId, this, true)
 
-fun ImageView.loadImage(url: Any, @ColorInt placeholderColor: Int = Color.TRANSPARENT, listener: RequestListener<Drawable>? = null) =
+fun ImageView.loadImage(url: Any, @ColorInt placeholder: Int = Color.TRANSPARENT, listener: RequestListener<Drawable>? = null) =
+    loadImage(url, ColorDrawable(placeholder), listener)
+
+fun ImageView.loadImage(url: Any, @ColorInt placeholder: Drawable? = null, listener: RequestListener<Drawable>? = null) =
     GlideApp.with(context.applicationContext)
         .load(url)
-        .placeholder(ColorDrawable(placeholderColor))
+        .placeholder(placeholder)
         .transition(DrawableTransitionOptions.withCrossFade())
         .listener(listener)
         .into(this)
