@@ -55,6 +55,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
             } else {
                 wallpaperRepo.addFavorite(wallpaper)
                 favorite.value = true
+                Analytics.logFavoriteWallpaper(wallpaper)
             }
         }
         return favorite
