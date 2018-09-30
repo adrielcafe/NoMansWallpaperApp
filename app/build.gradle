@@ -106,7 +106,7 @@ dependencies {
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
-    implementation "com.github.StephenVinouze:KinApp:1.0.2"
+    implementation "com.github.adrielcafe:KinApp:4d6a9e8afa"
     implementation "com.markodevcic.peko:peko:0.32"
 }
 
