@@ -10,14 +10,16 @@ import com.google.firebase.messaging.FirebaseMessaging
 import java.util.concurrent.TimeUnit
 
 object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
+    // Notification
     private const val NOTIFICATION_TOPIC = "wallpaper_added"
 
+    // SharedPreferences
     private const val PREF_NOTIFICATIONS = "notifications"
     private const val PREF_AUTO_CHANGE = "auto_change"
     private const val PREF_AUTO_CHANGE_FREQUENCY = "auto_change_frequency"
     private const val PREF_AUTO_CHANGE_NOTIFICATION = "auto_change_notification"
+    private const val PREF_AUTO_CHANGE_ONLY_FAVORITES = "auto_change_only_favorites"
     private const val PREF_HIGH_QUALITY_THUMB = "high_quality_thumb"
-
     private const val DEFAULT_AUTO_CHANGE_FREQUENCY = "7" // days
 
     fun init(context: Context){
@@ -35,11 +37,13 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
                 setNotificationEnabled(enabled)
             }
             PREF_AUTO_CHANGE,
-            PREF_AUTO_CHANGE_FREQUENCY -> sharedPreferences?.run {
+            PREF_AUTO_CHANGE_FREQUENCY,
+            PREF_AUTO_CHANGE_ONLY_FAVORITES -> sharedPreferences?.run {
                 val enabled = getBoolean(PREF_AUTO_CHANGE, false)
                 val frequency = getString(PREF_AUTO_CHANGE_FREQUENCY, DEFAULT_AUTO_CHANGE_FREQUENCY)!!
                 val notification = getBoolean(PREF_AUTO_CHANGE_NOTIFICATION, false)
-                setAutoChangeEnabled(enabled, frequency.toInt(), notification)
+                val onlyFavorites = getBoolean(PREF_AUTO_CHANGE_ONLY_FAVORITES, false)
+                setAutoChangeEnabled(enabled, frequency.toInt(), notification, onlyFavorites)
             }
         }
     }
@@ -52,9 +56,12 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
         }
     }
 
-    private fun setAutoChangeEnabled(enabled: Boolean, frequency: Int, showNotification: Boolean){
+    private fun setAutoChangeEnabled(enabled: Boolean, frequency: Int, showNotification: Boolean, onlyFavorites: Boolean){
         if(enabled){
-            val data = workDataOf(WallpaperWorker.PARAM_SHOW_NOTIFICATION to showNotification)
+            mmkv.encode(WallpaperWorker.KEY_WORKER_FIRST_RUN, true)
+            val data = workDataOf(
+                WallpaperWorker.PARAM_SHOW_NOTIFICATION to showNotification,
+                WallpaperWorker.PARAM_ONLY_FAVORITES to onlyFavorites)
             val constraints = Constraints.Builder()
                 .setRequiredNetworkType(NetworkType.CONNECTED)
                 .build()

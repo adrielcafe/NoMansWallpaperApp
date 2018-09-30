@@ -13,12 +13,15 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
     CoroutineScopedAndroidViewModel(app) {
 
     private val _wallpapers = MutableLiveData<List<Wallpaper>>()
+    private var favorites = emptySet<String>()
 
     val wallpapers: LiveData<List<Wallpaper>> get() = _wallpapers
 
     init {
         loadWallpapers()
     }
+
+    fun isFavorite(wallpaper: Wallpaper) = wallpaper.id in favorites
 
     fun loadWallpapers() {
         launch {
@@ -30,6 +33,11 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
                 _wallpapers.value = emptyList()
             }
         }
+    }
+
+    suspend fun loadFavorites(): Set<String> {
+        favorites = wallpaperRepo.getFavorites()
+        return favorites
     }
 
 }

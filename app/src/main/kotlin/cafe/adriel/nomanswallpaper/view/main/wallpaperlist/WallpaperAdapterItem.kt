@@ -1,8 +1,6 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.InsetDrawable
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -14,17 +12,10 @@ import cafe.adriel.nomanswallpaper.util.Settings
 import cafe.adriel.nomanswallpaper.util.clearImage
 import cafe.adriel.nomanswallpaper.util.loadImage
 import cafe.adriel.nomanswallpaper.util.px
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.target.Target
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
 
-class WallpaperAdapterItem(val wallpaper: Wallpaper) :
-    AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
-
-    var imageLoaded = false
+class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () -> Boolean) : AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
 
     override fun getLayoutRes() = R.layout.item_wallpaper
 
@@ -34,12 +25,12 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
 
     override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
         super.bindView(holder, payloads)
-        val imageColor = try {
-            Color.parseColor(wallpaper.colorHex)
-        } catch (e: Exception){
-            Color.BLACK
-        }
         with(holder.itemView) {
+            val imageColor = try {
+                Color.parseColor(wallpaper.colorHex)
+            } catch (e: Exception){
+                Color.TRANSPARENT
+            }
             val imageUrl = if(wallpaper.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(context))
                 wallpaper.thumbUrl
             else
@@ -50,20 +41,9 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
                 setColorSchemeColors(Color.WHITE)
                 start()
             }
+
             vWallpaper.setBackgroundColor(imageColor)
-            vWallpaper.loadImage(imageUrl, placeholder, object : RequestListener<Drawable> {
-                override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<Drawable>?,
-                                          isFirstResource: Boolean): Boolean {
-                    imageLoaded = false
-                    return false
-                }
-                override fun onResourceReady(resource: Drawable?, model: Any?,
-                                             target: Target<Drawable>?, dataSource: DataSource?,
-                                             isFirstResource: Boolean): Boolean {
-                    imageLoaded = true
-                    return false
-                }
-            })
+            vWallpaper.loadImage(imageUrl, placeholder)
 
             if (wallpaper.author.isNotBlank()) {
                 vAuthor.visibility = View.VISIBLE
@@ -72,26 +52,46 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper) :
                 val userIcon = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_person, null)
                 userIcon?.let {
                     DrawableCompat.setTint(it, Color.WHITE)
-                    vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(
-                        InsetDrawable(it, 2.px), null, null, null)
+                    vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(it, null, null, null)
+                    it.setBounds(0, 0, 20.px, 20.px)
                 }
             } else {
                 vAuthor.visibility = View.INVISIBLE
                 vAuthor.text = ""
             }
+
+            updateFavorite(this)
         }
     }
 
     override fun unbindView(holder: ViewHolder) {
         super.unbindView(holder)
         with(holder.itemView) {
-            imageLoaded = false
             vWallpaper.clearImage()
             vDetailsLayout.setBackgroundColor(Color.TRANSPARENT)
             vAuthor.text = ""
             vAuthor.visibility = View.INVISIBLE
             vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(0, 0, 0, 0)
+
+            updateFavorite(this)
         }
+    }
+
+    fun updateFavorite(view: View){
+        with(view){
+            if(isFavorite()){
+                vFavorite.setImageResource(R.drawable.ic_favorite)
+                vFavorite.contentDescription = context.getString(R.string.remove_favorites)
+            } else {
+                vFavorite.setImageResource(R.drawable.ic_favorite_outline)
+                vFavorite.contentDescription = context.getString(R.string.add_favorites)
+            }
+            vFavorite.drawable.alpha = 255
+        }
+    }
+
+    fun isLoading(view: View): Boolean = view.run {
+        vWallpaper.drawable is CircularProgressDrawable
     }
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view)

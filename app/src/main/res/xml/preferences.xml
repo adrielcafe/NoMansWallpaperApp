@@ -33,6 +33,12 @@
             android:defaultValue="true"
             android:dependency="auto_change"/>
 
+        <CheckBoxPreference
+            android:key="auto_change_only_favorites"
+            android:title="@string/only_favorites"
+            android:defaultValue="false"
+            android:dependency="auto_change"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/general">

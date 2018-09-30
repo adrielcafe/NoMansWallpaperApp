@@ -14,6 +14,7 @@ import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
+import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import cafe.adriel.nomanswallpaper.util.Analytics
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
@@ -23,7 +24,7 @@ import kotlinx.coroutines.experimental.launch
 import kotlinx.coroutines.experimental.withContext
 import java.io.File
 
-class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app) {
+class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) : CoroutineScopedAndroidViewModel(app) {
 
     companion object {
         private const val PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.provider"
@@ -36,6 +37,28 @@ class WallpaperViewModel(app: Application) : CoroutineScopedAndroidViewModel(app
 
     val wallpaperUpdated: LiveData<Boolean> get() = _wallpaperUpdated
     val wallpaperDownloaded: LiveData<String> get() = _wallpaperDownloaded
+
+    fun isFavorite(wallpaper: Wallpaper): LiveData<Boolean> {
+        val favorite = MutableLiveData<Boolean>()
+        launch {
+            favorite.value = wallpaperRepo.isFavorite(wallpaper)
+        }
+        return favorite
+    }
+
+    fun toggleFavorite(wallpaper: Wallpaper): LiveData<Boolean> {
+        val favorite = MutableLiveData<Boolean>()
+        launch {
+            if(wallpaperRepo.isFavorite(wallpaper)){
+                wallpaperRepo.removeFavorite(wallpaper)
+                favorite.value = false
+            } else {
+                wallpaperRepo.addFavorite(wallpaper)
+                favorite.value = true
+            }
+        }
+        return favorite
+    }
 
     fun setWallpaper(wallpaper: Wallpaper, quick: Boolean = false) {
         launch {

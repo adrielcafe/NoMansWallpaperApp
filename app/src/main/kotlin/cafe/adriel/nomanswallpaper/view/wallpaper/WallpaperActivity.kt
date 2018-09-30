@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
 import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
 import cafe.adriel.nomanswallpaper.R
@@ -19,11 +20,14 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.crashlytics.android.Crashlytics
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.hlab.fabrevealmenu.helper.AnimationHelper
 import com.hlab.fabrevealmenu.listeners.OnFABMenuSelectedListener
+import com.hlab.fabrevealmenu.listeners.OnMenuStateChangedListener
 import com.markodevcic.peko.Peko
+import com.markodevcic.peko.PermissionRequestResult
 import com.markodevcic.peko.rationale.SnackBarRationale
 import com.tinsuke.icekick.extension.freezeInstanceState
 import com.tinsuke.icekick.extension.parcelState
@@ -33,7 +37,7 @@ import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
+class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, OnMenuStateChangedListener {
 
     companion object {
         private const val EXTRA_WALLPAPER = "wallpaper"
@@ -118,6 +122,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
         vClose.setOnClickListener { exit() }
         with(vOptionsMenu) {
             bindAnchorView(vShowOptions)
+            setOnMenuStateChangedListener(this@WallpaperActivity)
             setOnFABMenuSelectedListener(this@WallpaperActivity)
             getItemById(R.id.opt_set_wallpaper).iconDrawable.setTint(Color.WHITE)
             getItemById(R.id.opt_set_as).iconDrawable.setTint(Color.WHITE)
@@ -163,7 +168,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
             val loadingSnackBar = Snackbar.make(vRoot,
                 R.string.downloading_wallpaper, Snackbar.LENGTH_LONG)
             delay((AnimationHelper.REVEAL_DURATION * 2).toLong())
-            wallpaper?.let {
+            wallpaper?.also {
                 when (id) {
                     R.id.opt_set_wallpaper -> if (isConnected()) {
                         loadingSnackBar.show()
@@ -173,8 +178,12 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
                         loadingSnackBar.show()
                         viewModel.setWallpaper(it, false)
                     }
+                    R.id.opt_favorite -> {
+                        loadingSnackBar.dismiss()
+                        toggleFavorite(it)
+                    }
                     R.id.opt_download -> if (isConnected()) {
-                        loadingSnackBar.show()
+                        loadingSnackBar.dismiss()
                         downloadWallpaper(it)
                     }
                     R.id.opt_share -> if (isConnected()) {
@@ -188,6 +197,32 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
                 }
             }
         }
+    }
+
+    override fun onExpand() {
+        wallpaper?.let {
+            viewModel.isFavorite(it).observeOnce(this, Observer { isFavorite ->
+                val menuItem = vOptionsMenu.getItemById(R.id.opt_favorite)
+                if(isFavorite){
+                    menuItem.title = getString(R.string.remove_favorites)
+                    menuItem.iconDrawable = ResourcesCompat.getDrawable(
+                        resources, R.drawable.ic_favorite, null)?.apply {
+                            setTint(Color.WHITE)
+                        }
+                } else {
+                    menuItem.title = getString(R.string.add_favorites)
+                    menuItem.iconDrawable = ResourcesCompat.getDrawable(
+                        resources, R.drawable.ic_favorite_outline, null)?.apply {
+                            setTint(Color.WHITE)
+                        }
+                }
+                menuItem.iconDrawable.alpha = 255
+            })
+        }
+    }
+
+    override fun onCollapse() {
+
     }
 
     private fun onWallpaperUpdated(success: Boolean) {
@@ -211,16 +246,31 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener {
         }
     }
 
+    private fun toggleFavorite(wallpaper: Wallpaper){
+        viewModel.toggleFavorite(wallpaper).observeOnce(this, Observer { isFavorite ->
+            val message = if(isFavorite) R.string.added_favorites else R.string.removed_favorites
+            Snackbar.make(vRoot, message, Snackbar.LENGTH_SHORT).show()
+            postEvent(FavoriteWallpaperEvent(wallpaper), true)
+        })
+    }
+
     private fun downloadWallpaper(wallpaper: Wallpaper) {
         launch {
-            val rationaleSnackBar =
-                Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
-            val rationale = SnackBarRationale(rationaleSnackBar, getString(R.string.allow))
-            val result = Peko.requestPermissionsAsync(
-                this@WallpaperActivity,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
-            ).await()
-            if (Manifest.permission.WRITE_EXTERNAL_STORAGE in result.grantedPermissions) {
+            val permissionResult = try {
+                val rationaleSnackBar =
+                    Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
+                val rationale = SnackBarRationale(rationaleSnackBar, getString(R.string.allow))
+                Peko.requestPermissionsAsync(
+                    this@WallpaperActivity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
+                ).await()
+            } catch (e: Exception){
+                Crashlytics.logException(e)
+                e.printStackTrace()
+                PermissionRequestResult(emptyList(), emptyList())
+            }
+            if (Manifest.permission.WRITE_EXTERNAL_STORAGE in permissionResult.grantedPermissions) {
+                Snackbar.make(vRoot, R.string.downloading_wallpaper, Snackbar.LENGTH_LONG).show()
                 viewModel.downloadWallpaper(wallpaper)
             }
         }

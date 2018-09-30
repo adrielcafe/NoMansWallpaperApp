@@ -63,8 +63,8 @@ dependencies {
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0"
-    implementation 'com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.0'
-    implementation 'com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.0'
+    implementation "com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.0"
+    implementation "com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.0"
 
     // Android
     implementation "com.google.android.material:material:$materialVersion"
@@ -96,9 +96,13 @@ dependencies {
     implementation "io.github.kobakei:ratethisapp:1.2.0"
     implementation "com.github.lawloretienne:discreteslider:0.0.9"
     implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.4"
+    implementation "com.github.Kennyc1012:MultiStateView:1.3.2"
+    implementation "com.github.adrielcafe:StickySwitch:356b9d8d26"
 
     // Util
+    implementation "com.tencent:mmkv:1.0.10"
     implementation "org.koin:koin-androidx-viewmodel:1.0.1"
+    implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
     implementation "com.github.StephenVinouze:KinApp:1.0.2"

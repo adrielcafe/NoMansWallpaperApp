@@ -8,13 +8,23 @@
     android:layout_height="match_parent"
     tools:context=".view.main.wallpaperlist.WallpaperListFragment">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/vWallpaperList"
+    <com.kennyc.view.MultiStateView
+        android:id="@+id/vState"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        app:spanCount="2"
-        tools:listitem="@layout/item_wallpaper"/>
+        app:msv_emptyView="@layout/state_empty"
+        app:msv_animateViewChanges="false"
+        app:msv_viewState="content">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/vWallpaperList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/item_wallpaper"/>
+
+    </com.kennyc.view.MultiStateView>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

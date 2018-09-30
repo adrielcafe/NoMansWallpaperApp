@@ -30,6 +30,7 @@
                     android:id="@+id/vToolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?actionBarSize"
+                    android:paddingEnd="5dp"
                     app:layout_collapseMode="parallax"
                     app:contentInsetStartWithNavigation="0dp"
                     app:titleTextColor="@android:color/white"

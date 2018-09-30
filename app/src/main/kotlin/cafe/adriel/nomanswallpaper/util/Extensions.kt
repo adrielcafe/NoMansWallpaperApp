@@ -16,15 +16,21 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.ColorInt
 import androidx.annotation.ColorRes
+import androidx.annotation.DrawableRes
 import androidx.annotation.LayoutRes
 import androidx.core.app.ShareCompat
 import androidx.core.content.getSystemService
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
 import cafe.adriel.nomanswallpaper.R
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
 import com.crashlytics.android.Crashlytics
+import com.tencent.mmkv.MMKV
+import org.greenrobot.eventbus.EventBus
 
 // General
 val Int.dp: Int
@@ -33,7 +39,16 @@ val Int.dp: Int
 val Int.px: Int
     get() = (this * Resources.getSystem().displayMetrics.density).toInt()
 
+val mmkv: MMKV
+    get() = MMKV.defaultMMKV(MMKV.MULTI_PROCESS_MODE, null)
+
 fun <T> classTag(): String = T::class.java.simpleName
+
+fun postEvent(event: Any, sticky: Boolean = false) = if(sticky){
+    EventBus.getDefault().postSticky(event)
+} else {
+    EventBus.getDefault().post(event)
+}
 
 fun String.share(activity: Activity) =
     ShareCompat.IntentBuilder
@@ -51,7 +66,9 @@ fun String.copyToClipboard(context: Context) = try {
 }
 
 // Context
-fun Context.colorFrom(@ColorRes colorRes: Int) = ResourcesCompat.getColor(resources, colorRes, theme)
+fun Context.colorFrom(@ColorRes resId: Int) = ResourcesCompat.getColor(resources, resId, theme)
+
+fun Context.drawableFrom(@DrawableRes resId: Int) = ResourcesCompat.getDrawable(resources, resId, theme)
 
 fun Context.isConnected(showErrorMessage: Boolean = true): Boolean {
     val connected = getSystemService<ConnectivityManager>()
@@ -72,6 +89,15 @@ fun Uri.open(context: Context, showErrorMessage: Boolean = true) = try {
     }
     Crashlytics.logException(e)
     e.printStackTrace()
+}
+
+fun <T> LiveData<T>.observeOnce(owner: LifecycleOwner, observer: Observer<T>) {
+    observe(owner, object : Observer<T> {
+        override fun onChanged(t: T?) {
+            observer.onChanged(t)
+            removeObserver(this)
+        }
+    })
 }
 
 // View

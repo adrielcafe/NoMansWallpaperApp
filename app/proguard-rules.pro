@@ -37,5 +37,12 @@
   public *;
 }
 
+# EventBus
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @org.greenrobot.eventbus.Subscribe <methods>;
+}
+-keep enum org.greenrobot.eventbus.ThreadMode { *; }
+
 # ArcAnimator
 -keep class io.codetail.animation.arcanimator.** { *; }

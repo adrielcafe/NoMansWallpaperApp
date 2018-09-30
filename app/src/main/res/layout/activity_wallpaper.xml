@@ -46,7 +46,6 @@
         android:background="@drawable/bg_rounded_white"
         android:drawableStart="@drawable/ic_person"
         android:visibility="invisible"
-        app:layout_behavior="cafe.adriel.nomanswallpaper.view.custom.SnackBarAwareBehavior"
         app:fontFamily="sans-serif-condensed-medium"
         tools:text="@tools:sample/full_names"
         tools:visibility="visible"/>
@@ -71,7 +70,6 @@
         android:tint="@android:color/white"
         android:visibility="invisible"
         android:contentDescription="@string/open_menu"
-        app:layout_behavior="cafe.adriel.nomanswallpaper.view.custom.SnackBarAwareBehavior"
         tools:visibility="visible"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

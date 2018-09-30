@@ -4,6 +4,7 @@
     <string name="adriel_cafe" translatable="false">Adriel Café</string>
     <string name="android_developer" translatable="false">Android Developer</string>
     <string name="adrielcafe_nomanswallpaperapp" translatable="false">adrielcafe/NoMansWallpaperApp</string>
+    <string name="oops" translatable="false">Oops…</string>
 
     <string name="hi_there_are_you_enjoying_the_app">Hi there! Are you enjoying the app? I hope so 😊\n\nIf you have any question, suggestion or want to contribute (new content, found a bug, translation…) please contact me using the links below.</string>
     <string name="this_app_is_open_source">This app is open source, contributions are very welcome!</string>
@@ -52,6 +53,14 @@
     <string name="new_wallpaper_set">A new wallpaper has been set</string>
     <string name="general">General</string>
     <string name="high_quality_preview">High quality preview</string>
+    <string name="add_favorites">Add to Favorites</string>
+    <string name="added_favorites">Added to Favorites</string>
+    <string name="remove_favorites">Remove from Favorites</string>
+    <string name="removed_favorites">Removed from Favorites</string>
+    <string name="only_favorites">Only favorites</string>
+    <string name="favorites">Favorites</string>
+    <string name="filter">Filter</string>
+    <string name="no_wallpaper_found">No wallpaper found</string>
 
     <string-array name="preference_auto_set_entries">
         <item>@string/every_day</item>

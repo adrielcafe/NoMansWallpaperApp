@@ -13,6 +13,7 @@ import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import cafe.adriel.nomanswallpaper.util.GlideApp
+import cafe.adriel.nomanswallpaper.util.mmkv
 import cafe.adriel.nomanswallpaper.view.main.MainActivity
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
@@ -20,27 +21,50 @@ import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.GlobalScope
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.launch
+import org.koin.standalone.KoinComponent
+import org.koin.standalone.inject
 import java.util.concurrent.LinkedBlockingQueue
 
-class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker(context, params) {
+class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker(context, params), KoinComponent {
 
     companion object {
+        // WorkManager
         const val TAG = "set_random_wallpaper"
+        const val PARAM_SHOW_NOTIFICATION = "show_notification"
+        const val PARAM_ONLY_FAVORITES = "only_favorites"
 
+        // Notification
         const val NOTIFICATION_ID = 0
         const val NOTIFICATION_CHANNEL = "wallpaper_set"
 
-        const val PARAM_SHOW_NOTIFICATION = "show_notification"
+        // MMKV
+        const val KEY_WORKER_FIRST_RUN = "worker_first_run"
     }
 
-    private val wallpaperRepo by lazy { WallpaperRepository() }
+    private val wallpaperRepo by inject<WallpaperRepository>()
 
     override fun doWork(): Result {
+        val firstRun = mmkv.decodeBool(KEY_WORKER_FIRST_RUN, false)
+        if(firstRun){
+            mmkv.encode(KEY_WORKER_FIRST_RUN, false)
+            return Result.SUCCESS
+        }
+
         val result = LinkedBlockingQueue<Result>()
         GlobalScope.launch(Dispatchers.IO) {
-            val wallpapers = wallpaperRepo.getWallpapers()
+            val showNotification = inputData.getBoolean(PARAM_SHOW_NOTIFICATION, false)
+            val onlyFavorites = inputData.getBoolean(PARAM_ONLY_FAVORITES, false)
+            val wallpapers = wallpaperRepo.getWallpapers().run {
+                if(onlyFavorites){
+                    val favorites = wallpaperRepo.getFavorites()
+                    if(favorites.isNotEmpty()){
+                        return@run filter { it.id in favorites }
+                    }
+                }
+                this
+            }
+
             if(setRandomWallpaper(wallpapers)) {
-                val showNotification = inputData.getBoolean(PARAM_SHOW_NOTIFICATION, false)
                 if(showNotification) {
                     showSuccessNotification()
                 }

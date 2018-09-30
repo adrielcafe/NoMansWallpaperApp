@@ -10,6 +10,7 @@ import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
 import com.github.ajalt.timberkt.Timber
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
+import com.tencent.mmkv.MMKV
 import org.koin.android.ext.android.startKoin
 import org.koin.android.logger.AndroidLogger
 import org.koin.androidx.viewmodel.ext.koin.viewModel
@@ -40,7 +41,7 @@ class App : Application() {
     // DI
     private val viewModelsModule = module {
         viewModel { MainViewModel(this@App) }
-        viewModel { WallpaperViewModel(this@App) }
+        viewModel { WallpaperViewModel(this@App, get()) }
         viewModel { WallpaperListViewModel(this@App, get()) }
     }
     private val repositoriesModule = module {
@@ -52,6 +53,7 @@ class App : Application() {
         startKoin(this, listOf(repositoriesModule, viewModelsModule))
         initLogging()
         initDatabase()
+        MMKV.initialize(this)
         Settings.init(this)
         Analytics.init(this)
     }

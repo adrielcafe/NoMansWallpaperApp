@@ -48,5 +48,13 @@
     <string name="new_wallpaper_set">Um novo plano de fundo foi definido</string>
     <string name="general">Geral</string>
     <string name="high_quality_preview">Pré-visualização de alta qualidade</string>
+    <string name="add_favorites">Adicionar aos Favoritos</string>
+    <string name="added_favorites">Adicionado aos Favoritos</string>
+    <string name="remove_favorites">Remover dos Favoritos</string>
+    <string name="removed_favorites">Removido dos Favoritos</string>
+    <string name="only_favorites">Somente favoritos</string>
+    <string name="favorites">Favoritos</string>
+    <string name="filter">Filtro</string>
+    <string name="no_wallpaper_found">Nenhum plano de fundo encontrado</string>
 
 </resources>
