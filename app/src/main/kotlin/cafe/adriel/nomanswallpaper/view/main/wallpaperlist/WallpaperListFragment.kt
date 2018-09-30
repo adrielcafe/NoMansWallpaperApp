@@ -10,12 +10,14 @@ import androidx.recyclerview.widget.RecyclerView
 import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedFragment
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
-import cafe.adriel.nomanswallpaper.util.FavoriteWallpaperEvent
-import cafe.adriel.nomanswallpaper.util.isConnected
-import cafe.adriel.nomanswallpaper.util.loadImage
-import cafe.adriel.nomanswallpaper.util.observeOnce
+import cafe.adriel.nomanswallpaper.util.*
+import cafe.adriel.nomanswallpaper.view.custom.WallpaperImageView
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperActivity
 import cafe.adriel.nomanswallpaper.view.wallpaper.WallpaperViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.ListPreloader.PreloadModelProvider
+import com.bumptech.glide.integration.recyclerview.RecyclerViewPreloader
+import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.google.android.material.snackbar.Snackbar
 import com.kennyc.view.MultiStateView
 import com.mikepenz.fastadapter.FastAdapter
@@ -31,6 +33,7 @@ import kotlinx.coroutines.experimental.withContext
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.Collections.singletonList
 
 class WallpaperListFragment : CoroutineScopedFragment() {
 
@@ -80,17 +83,24 @@ class WallpaperListFragment : CoroutineScopedFragment() {
             }
         }
 
+        val imageModelProvider = WallpaperPreloadModelProvider()
+        val imageSizeProvider = FixedPreloadSizeProvider<String>(
+            WallpaperImageView.IMAGE_WIDTH, WallpaperImageView.IMAGE_HEIGHT)
+        val imagePreloader = RecyclerViewPreloader(
+            Glide.with(this), imageModelProvider, imageSizeProvider, 10)
+
         with(view) {
             vRefresh.isRefreshing = true
             vRefresh.setOnRefreshListener { listViewModel.loadWallpapers() }
 
-            vWallpaperList.adapter = adapter
+            vWallpaperList.addOnScrollListener(imagePreloader)
             vWallpaperList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     val manager = recyclerView.layoutManager as LinearLayoutManager
                     vRefresh.isEnabled = manager.findFirstCompletelyVisibleItemPosition() == 0
                 }
             })
+            vWallpaperList.adapter = adapter
         }
 
         singleViewModel.wallpaperUpdated.observe(this, Observer { onWallpaperUpdated(it) })
@@ -199,6 +209,24 @@ class WallpaperListFragment : CoroutineScopedFragment() {
                 }
             }
         }
+    }
+
+    private inner class WallpaperPreloadModelProvider : PreloadModelProvider<String> {
+        override fun getPreloadItems(position: Int): List<String> {
+            val imageUrl = context?.run {
+                val wallpaper = adapter.getAdapterItem(position).wallpaper
+                if (wallpaper.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(this))
+                    wallpaper.thumbUrl
+                else
+                    wallpaper.url
+            }.orEmpty()
+            return if(imageUrl.isNotEmpty()) singletonList(imageUrl) else emptyList()
+        }
+
+        override fun getPreloadRequestBuilder(url: String) =
+            GlideApp.with(this@WallpaperListFragment)
+                .load(url)
+                .override(WallpaperImageView.IMAGE_WIDTH, WallpaperImageView.IMAGE_HEIGHT)
     }
 
 }

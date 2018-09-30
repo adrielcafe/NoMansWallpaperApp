@@ -12,8 +12,8 @@ android {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 7
-        versionName "1.1.0"
+        versionCode 8
+        versionName "1.2.0"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -91,6 +91,7 @@ dependencies {
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     implementation "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
+    implementation "com.github.bumptech.glide:recyclerview-integration:$glideVersion"
     implementation "com.mikepenz:fastadapter:$fastAdapterVersion"
     implementation "com.mikepenz:fastadapter-commons:$fastAdapterVersion"
     implementation "io.github.kobakei:ratethisapp:1.2.0"

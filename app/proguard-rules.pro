@@ -46,3 +46,6 @@
 
 # ArcAnimator
 -keep class io.codetail.animation.arcanimator.** { *; }
+
+# StickySwitch
+-keep class io.ghyeok.stickyswitch.widget.StickySwitch { *; }
