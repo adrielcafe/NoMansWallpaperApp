@@ -195,6 +195,10 @@ class WallpaperListFragment : CoroutineScopedFragment() {
         }
     }
 
+    fun sortWallpapers(sortBy: WallpaperListViewModel.SortBy){
+        listViewModel.loadWallpapers(sortBy)
+    }
+
     private fun getAdapterItem(wallpaper: Wallpaper): WallpaperAdapterItem? =
         adapter.adapterItems.firstOrNull { it.wallpaper.id == wallpaper.id }
 

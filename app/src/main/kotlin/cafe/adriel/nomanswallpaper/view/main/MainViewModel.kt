@@ -58,10 +58,7 @@ class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
         }
     }
 
-    override fun onPurchaseFinished(
-        purchaseResult: KinAppPurchaseResult,
-        purchase: KinAppPurchase?
-    ) {
+    override fun onPurchaseFinished(purchaseResult: KinAppPurchaseResult, purchase: KinAppPurchase?) {
         if (purchaseResult == KinAppPurchaseResult.SUCCESS && purchase != null) {
             launch {
                 billingManager.consumePurchase(purchase)

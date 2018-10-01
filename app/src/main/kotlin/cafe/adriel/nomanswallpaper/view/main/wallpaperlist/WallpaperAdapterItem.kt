@@ -81,10 +81,8 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
         with(view){
             if(isFavorite()){
                 vFavorite.setImageResource(R.drawable.ic_favorite)
-                vFavorite.contentDescription = context.getString(R.string.remove_favorites)
             } else {
                 vFavorite.setImageResource(R.drawable.ic_favorite_outline)
-                vFavorite.contentDescription = context.getString(R.string.add_favorites)
             }
             vFavorite.drawable.alpha = 255
         }

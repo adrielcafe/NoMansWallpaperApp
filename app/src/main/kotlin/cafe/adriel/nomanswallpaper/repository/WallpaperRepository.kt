@@ -31,9 +31,8 @@ class WallpaperRepository {
             Tasks.await(this)
             if(isSuccessful){
                 result.documents
-                    .apply {
-                        if(isNotEmpty()){
-                            shuffle()
+                    .also {
+                        if(it.isNotEmpty()){
                             FirebaseFirestore.getInstance().disableNetwork()
                         }
                     }

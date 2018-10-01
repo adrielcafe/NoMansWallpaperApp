@@ -58,7 +58,7 @@
         app:menuBackgroundColor="@color/colorAccent"
         app:menuDirection="up"
         app:menuSize="small"
-        app:menuRes="@menu/wallpaper_options"/>
+        app:menuRes="@menu/wallpaper"/>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/vShowOptions"

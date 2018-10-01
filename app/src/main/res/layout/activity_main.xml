@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:openDrawer="end">
+    tools:openDrawer="start">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/vRoot"
@@ -45,6 +45,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+        <com.hlab.fabrevealmenu.view.FABRevealMenu
+            android:id="@+id/vOptionsMenu"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:menuTitleTextColor="@android:color/white"
+            app:menuBackgroundColor="@color/colorAccent"
+            app:menuDirection="up"
+            app:menuSize="small"
+            app:menuRes="@menu/list_sort"/>
+
+        <!-- TODO Disabled until Firestore exposes 'createTime' property -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/vShowOptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:src="@drawable/ic_sort"
+            android:tint="@android:color/white"
+            android:contentDescription="@string/open_menu"
+            android:visibility="gone"
+            tools:visibility="visible"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

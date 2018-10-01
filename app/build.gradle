@@ -43,9 +43,6 @@ android {
         preDexLibraries true
         maxProcessCount 8
     }
-    lintOptions {
-        disable 'ParcelCreator'
-    }
 }
 
 kapt {
@@ -62,7 +59,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.27.0"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.30.0"
     implementation "com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.0"
     implementation "com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.0"
 

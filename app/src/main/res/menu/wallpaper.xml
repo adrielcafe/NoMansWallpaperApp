@@ -14,7 +14,7 @@
     <item
         android:id="@+id/opt_favorite"
         android:icon="@drawable/ic_favorite_outline"
-        android:title="@string/add_favorites"/>
+        android:title="@string/favorite"/>
 
     <item
         android:id="@+id/opt_download"

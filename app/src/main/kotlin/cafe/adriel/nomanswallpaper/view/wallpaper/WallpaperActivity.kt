@@ -204,13 +204,11 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
             viewModel.isFavorite(it).observeOnce(this, Observer { isFavorite ->
                 val menuItem = vOptionsMenu.getItemById(R.id.opt_favorite)
                 if(isFavorite){
-                    menuItem.title = getString(R.string.remove_favorites)
                     menuItem.iconDrawable = ResourcesCompat.getDrawable(
                         resources, R.drawable.ic_favorite, null)?.apply {
                             setTint(Color.WHITE)
                         }
                 } else {
-                    menuItem.title = getString(R.string.add_favorites)
                     menuItem.iconDrawable = ResourcesCompat.getDrawable(
                         resources, R.drawable.ic_favorite_outline, null)?.apply {
                             setTint(Color.WHITE)

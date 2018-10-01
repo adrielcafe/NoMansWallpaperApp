@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/opt_random"
+        android:icon="@drawable/ic_shuffle"
+        android:title="@string/random"/>
+
+    <item
+        android:id="@+id/opt_newest"
+        android:icon="@drawable/ic_arrow_upward"
+        android:title="@string/newest"/>
+
+    <item
+        android:id="@+id/opt_oldest"
+        android:icon="@drawable/ic_arrow_downward"
+        android:title="@string/oldest"/>
+
+</menu>

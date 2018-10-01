@@ -22,9 +22,11 @@ import cafe.adriel.nomanswallpaper.view.main.dialog.AboutDialog
 import cafe.adriel.nomanswallpaper.view.main.dialog.DonateDialog
 import cafe.adriel.nomanswallpaper.view.main.settings.SettingsFragment
 import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListFragment
+import cafe.adriel.nomanswallpaper.view.main.wallpaperlist.WallpaperListViewModel
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.FirebaseFirestore
+import com.hlab.fabrevealmenu.listeners.OnFABMenuSelectedListener
 import com.kobakei.ratethisapp.RateThisApp
 import io.ghyeok.stickyswitch.widget.StickySwitch
 import kotlinx.android.synthetic.main.activity_main.*
@@ -32,7 +34,7 @@ import kotlinx.android.synthetic.main.drawer_header.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener,
-    DonateDialog.OnDonateListener, StickySwitch.OnSelectedChangeListener {
+    DonateDialog.OnDonateListener, StickySwitch.OnSelectedChangeListener, OnFABMenuSelectedListener {
 
     private val viewModel by viewModel<MainViewModel>()
     private var favoriteFilterView: StickySwitch? = null
@@ -67,6 +69,14 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         val adapter = SectionsPagerAdapter(supportFragmentManager)
         vContent.adapter = adapter
         vContent.offscreenPageLimit = adapter.count
+
+        vOptionsMenu.let {
+            it.bindAnchorView(vShowOptions)
+            it.setOnFABMenuSelectedListener(this@MainActivity)
+            it.getItemById(R.id.opt_random).iconDrawable.setTint(Color.WHITE)
+            it.getItemById(R.id.opt_newest).iconDrawable.setTint(Color.WHITE)
+            it.getItemById(R.id.opt_oldest).iconDrawable.setTint(Color.WHITE)
+        }
 
         with(viewModel) {
             appUpdateAvailable.observe(this@MainActivity, Observer { newVersion ->
@@ -148,6 +158,18 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
             val onlyFavorites = direction == StickySwitch.Direction.RIGHT
             it.updateFilter(onlyFavorites)
             vToolbar.title = getString(if(onlyFavorites) R.string.favorites else R.string.wallpapers)
+        }
+    }
+
+    override fun onMenuItemSelected(view: View?, id: Int) {
+        val wallpaperListFrag = supportFragmentManager.fragments
+            .firstOrNull { it is WallpaperListFragment } as WallpaperListFragment?
+        wallpaperListFrag?.let {
+            when (id) {
+                R.id.opt_random -> it.sortWallpapers(WallpaperListViewModel.SortBy.RANDOM)
+                R.id.opt_newest -> it.sortWallpapers(WallpaperListViewModel.SortBy.NEWEST)
+                R.id.opt_oldest -> it.sortWallpapers(WallpaperListViewModel.SortBy.OLDEST)
+            }
         }
     }
 

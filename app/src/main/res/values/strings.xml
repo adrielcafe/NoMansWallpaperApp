@@ -53,14 +53,16 @@
     <string name="new_wallpaper_set">A new wallpaper has been set</string>
     <string name="general">General</string>
     <string name="high_quality_preview">High quality preview</string>
-    <string name="add_favorites">Add to Favorites</string>
     <string name="added_favorites">Added to Favorites</string>
-    <string name="remove_favorites">Remove from Favorites</string>
     <string name="removed_favorites">Removed from Favorites</string>
     <string name="only_favorites">Only favorites</string>
+    <string name="favorite">Favorite</string>
     <string name="favorites">Favorites</string>
     <string name="filter">Filter</string>
     <string name="no_wallpaper_found">No wallpaper found</string>
+    <string name="random">Random</string>
+    <string name="newest">Newest</string>
+    <string name="oldest">Oldest</string>
 
     <string-array name="preference_auto_set_entries">
         <item>@string/every_day</item>
