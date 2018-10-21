@@ -9,12 +9,14 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.experimental.Dispatchers
 import kotlinx.coroutines.experimental.IO
 import kotlinx.coroutines.experimental.withContext
+import java.util.*
 
 class WallpaperRepository {
 
     companion object {
         // Firestore
         private const val COLLECTION_WALLPAPERS = "wallpapers"
+        private const val QUERY_ORDER_BY = "createdAt"
         private const val QUERY_LIMIT = 1000L
 
         // MMKV
@@ -25,18 +27,19 @@ class WallpaperRepository {
     suspend fun getWallpapers(): List<Wallpaper> = withContext(Dispatchers.IO) {
         val collectionQuery = FirebaseFirestore.getInstance()
             .collection(COLLECTION_WALLPAPERS)
+            .orderBy(QUERY_ORDER_BY)
             .limit(QUERY_LIMIT)
             .get()
         with(collectionQuery) {
             Tasks.await(this)
             if(isSuccessful){
-                result.documents
-                    .also {
+                val items = result?.documents?.also {
                         if(it.isNotEmpty()){
                             FirebaseFirestore.getInstance().disableNetwork()
                         }
                     }
-                    .map { toWallpaper(it) }
+                    ?.map { toWallpaper(it) }
+                items ?: emptyList()
             } else {
                 Crashlytics.logException(exception)
                 exception?.printStackTrace()
@@ -51,7 +54,8 @@ class WallpaperRepository {
             document.getString("url") ?: "",
             document.getString("thumbUrl") ?: "",
             document.getString("colorHex") ?: "",
-            document.getString("author") ?: ""
+            document.getString("author") ?: "",
+            document.getDate("createdAt") ?: Date()
         )
 
     suspend fun addFavorite(wallpaper: Wallpaper) = withContext(Dispatchers.IO) {

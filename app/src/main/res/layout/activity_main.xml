@@ -56,7 +56,6 @@
             app:menuSize="small"
             app:menuRes="@menu/list_sort"/>
 
-        <!-- TODO Disabled until Firestore exposes 'createTime' property -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/vShowOptions"
             android:layout_width="wrap_content"
@@ -65,9 +64,7 @@
             android:layout_margin="16dp"
             android:src="@drawable/ic_sort"
             android:tint="@android:color/white"
-            android:contentDescription="@string/open_menu"
-            android:visibility="gone"
-            tools:visibility="visible"/>
+            android:contentDescription="@string/open_menu"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

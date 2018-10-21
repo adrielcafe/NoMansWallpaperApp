@@ -2,16 +2,12 @@ package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
 import android.graphics.Color
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
-import cafe.adriel.nomanswallpaper.util.Settings
-import cafe.adriel.nomanswallpaper.util.clearImage
-import cafe.adriel.nomanswallpaper.util.loadImage
-import cafe.adriel.nomanswallpaper.util.px
+import cafe.adriel.nomanswallpaper.util.*
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
 
@@ -49,8 +45,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
                 vAuthor.visibility = View.VISIBLE
                 vAuthor.text = wallpaper.author
 
-                val userIcon = ResourcesCompat.getDrawable(context.resources, R.drawable.ic_person, null)
-                userIcon?.let {
+                context.drawableFrom(R.drawable.ic_person)?.let {
                     DrawableCompat.setTint(it, Color.WHITE)
                     vAuthor.setCompoundDrawablesRelativeWithIntrinsicBounds(it, null, null, null)
                     it.setBounds(0, 0, 20.px, 20.px)

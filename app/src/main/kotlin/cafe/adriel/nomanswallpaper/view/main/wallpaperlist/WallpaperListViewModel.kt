@@ -22,9 +22,8 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
             try {
                 wallpapers.value = wallpaperRepo.getWallpapers().run {
                     when(sortBy){
-                        // TODO Disabled until Firestore exposes 'createTime' property
-                        SortBy.NEWEST -> sortedByDescending { it.id }
-                        SortBy.OLDEST-> sortedBy { it.id }
+                        SortBy.NEWEST -> reversed()
+                        SortBy.OLDEST-> this
                         else -> shuffled()
                     }
                 }

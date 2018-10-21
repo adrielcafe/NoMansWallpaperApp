@@ -4,7 +4,7 @@ buildscript {
     ext.androidXVersion = '1.0.0'
     ext.lifecycleVersion = '2.0.0'
     ext.ktxVersion = '1.0.0'
-    ext.workVersion = '1.0.0-alpha09'
+    ext.workVersion = '1.0.0-alpha10'
     ext.glideVersion = '4.8.0'
     ext.fastAdapterVersion = '3.3.1'
 
@@ -15,7 +15,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0-alpha12'
+        classpath 'com.android.tools.build:gradle:3.3.0-beta01'
         classpath "com.google.gms:google-services:4.0.2"
         classpath "com.google.firebase:firebase-plugins:1.1.5"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"

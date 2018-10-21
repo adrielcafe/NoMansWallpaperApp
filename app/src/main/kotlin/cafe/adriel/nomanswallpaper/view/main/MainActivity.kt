@@ -165,11 +165,12 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         val wallpaperListFrag = supportFragmentManager.fragments
             .firstOrNull { it is WallpaperListFragment } as WallpaperListFragment?
         wallpaperListFrag?.let {
-            when (id) {
-                R.id.opt_random -> it.sortWallpapers(WallpaperListViewModel.SortBy.RANDOM)
-                R.id.opt_newest -> it.sortWallpapers(WallpaperListViewModel.SortBy.NEWEST)
-                R.id.opt_oldest -> it.sortWallpapers(WallpaperListViewModel.SortBy.OLDEST)
+            val sortBy = when (id) {
+                R.id.opt_newest -> WallpaperListViewModel.SortBy.NEWEST
+                R.id.opt_oldest -> WallpaperListViewModel.SortBy.OLDEST
+                else -> WallpaperListViewModel.SortBy.RANDOM
             }
+            it.sortWallpapers(sortBy)
         }
     }
 
