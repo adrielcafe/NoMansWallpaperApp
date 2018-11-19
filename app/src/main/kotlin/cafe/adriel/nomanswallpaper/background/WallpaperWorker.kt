@@ -17,10 +17,9 @@ import cafe.adriel.nomanswallpaper.util.mmkv
 import cafe.adriel.nomanswallpaper.view.main.MainActivity
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.GlobalScope
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import org.koin.standalone.KoinComponent
 import org.koin.standalone.inject
 import java.util.concurrent.LinkedBlockingQueue

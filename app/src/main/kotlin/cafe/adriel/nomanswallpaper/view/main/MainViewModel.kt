@@ -14,7 +14,7 @@ import com.github.stephenvinouze.core.managers.KinAppManager
 import com.github.stephenvinouze.core.models.KinAppProductType
 import com.github.stephenvinouze.core.models.KinAppPurchase
 import com.github.stephenvinouze.core.models.KinAppPurchaseResult
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
     KinAppManager.KinAppListener {

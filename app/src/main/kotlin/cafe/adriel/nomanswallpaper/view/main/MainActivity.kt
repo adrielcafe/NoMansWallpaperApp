@@ -204,6 +204,7 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         vToolbar.title = getString(if(onlyFavorites) R.string.favorites else R.string.wallpapers)
         vContent.currentItem = 0
         vDrawerNav.menu.getItem(0).isChecked = true
+        vShowOptions?.show()
         favoriteFilterView?.visibility = View.VISIBLE
     }
 
@@ -211,6 +212,7 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         vToolbar.title = getString(R.string.settings)
         vContent.currentItem = 1
         vDrawerNav.menu.getItem(1).isChecked = true
+        vShowOptions?.hide()
         favoriteFilterView?.visibility = View.GONE
     }
 

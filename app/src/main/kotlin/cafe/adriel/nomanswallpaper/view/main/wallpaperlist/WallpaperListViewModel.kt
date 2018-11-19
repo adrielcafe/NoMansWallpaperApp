@@ -8,7 +8,7 @@ import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewMo
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import com.crashlytics.android.Crashlytics
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.launch
 
 class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) :
     CoroutineScopedAndroidViewModel(app) {

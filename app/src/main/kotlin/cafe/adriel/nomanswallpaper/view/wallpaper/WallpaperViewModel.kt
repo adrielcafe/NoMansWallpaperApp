@@ -18,10 +18,9 @@ import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import cafe.adriel.nomanswallpaper.util.Analytics
 import com.bumptech.glide.Glide
 import com.crashlytics.android.Crashlytics
-import kotlinx.coroutines.experimental.Dispatchers
-import kotlinx.coroutines.experimental.IO
-import kotlinx.coroutines.experimental.launch
-import kotlinx.coroutines.experimental.withContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 
 class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) : CoroutineScopedAndroidViewModel(app) {

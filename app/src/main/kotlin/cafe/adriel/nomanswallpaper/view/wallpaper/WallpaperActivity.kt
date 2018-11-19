@@ -33,8 +33,8 @@ import com.tinsuke.icekick.extension.freezeInstanceState
 import com.tinsuke.icekick.extension.parcelState
 import com.tinsuke.icekick.extension.unfreezeInstanceState
 import kotlinx.android.synthetic.main.activity_wallpaper.*
-import kotlinx.coroutines.experimental.delay
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, OnMenuStateChangedListener {
@@ -261,7 +261,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
                 Peko.requestPermissionsAsync(
                     this@WallpaperActivity,
                     Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
-                ).await()
+                )
             } catch (e: Exception){
                 Crashlytics.logException(e)
                 e.printStackTrace()
