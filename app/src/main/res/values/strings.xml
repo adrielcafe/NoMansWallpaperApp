@@ -63,6 +63,7 @@
     <string name="random">Random</string>
     <string name="newest">Newest</string>
     <string name="oldest">Oldest</string>
+    <string name="privacy_policy">Privacy Policy</string>
 
     <string-array name="preference_auto_set_entries">
         <item>@string/every_day</item>

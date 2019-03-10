@@ -46,7 +46,7 @@ class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker
         val firstRun = mmkv.decodeBool(KEY_WORKER_FIRST_RUN, false)
         if(firstRun){
             mmkv.encode(KEY_WORKER_FIRST_RUN, false)
-            return Result.SUCCESS
+            return Result.success()
         }
 
         val result = LinkedBlockingQueue<Result>()
@@ -67,9 +67,9 @@ class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker
                 if(showNotification) {
                     showSuccessNotification()
                 }
-                result.put(Result.SUCCESS)
+                result.put(Result.success())
             } else {
-                result.put(Result.RETRY)
+                result.put(Result.retry())
             }
         }
         return result.take()

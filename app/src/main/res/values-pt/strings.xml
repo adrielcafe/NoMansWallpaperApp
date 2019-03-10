@@ -58,5 +58,6 @@
     <string name="random">Aleatório</string>
     <string name="newest">Mais novos</string>
     <string name="oldest">Mais antigos</string>
+    <string name="privacy_policy">Política de Privacidade</string>
 
 </resources>

@@ -61,6 +61,10 @@ class AboutDialog private constructor(context: Context) : AppCompatDialog(contex
             Uri.parse(App.PROJECT_REPO_URL).open(context)
             Analytics.logOpenUrl(App.PROJECT_REPO_URL)
         }
+        vPrivacyPolicy.setOnClickListener {
+            Uri.parse(App.PRIVACY_POLICY_URL).open(context)
+            Analytics.logOpenUrl(App.PRIVACY_POLICY_URL)
+        }
     }
 
     private fun sendEmail() {

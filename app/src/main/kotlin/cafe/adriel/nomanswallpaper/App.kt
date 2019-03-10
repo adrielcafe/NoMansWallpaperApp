@@ -27,6 +27,7 @@ class App : Application() {
         const val GITHUB_PROFILE_URL = "https://github.com/adrielcafe"
         const val LINKEDIN_PROFILE_URL = "https://linkedin.com/in/adrielcafe"
         const val PROJECT_REPO_URL = "https://github.com/adrielcafe/NoMansWallpaperApp"
+        const val PRIVACY_POLICY_URL = "https://adriel.cafe/privacy_policy/nomanswallpaper"
 
         // App Links
         const val PLAY_STORE_URL = "https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}"
