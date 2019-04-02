@@ -12,8 +12,8 @@ android {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 10
-        versionName "1.2.2"
+        versionCode 11
+        versionName "1.2.3"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -69,17 +69,17 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleVersion"
     implementation "androidx.core:core-ktx:1.0.1"
     implementation "androidx.fragment:fragment-ktx:1.0.0"
-    implementation("android.arch.work:work-runtime-ktx:$workVersion"){
+    implementation("androidx.work:work-runtime-ktx:$workVersion"){
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
     // Firebase
-    implementation "com.google.firebase:firebase-core:16.0.7"
-    implementation "com.google.firebase:firebase-analytics:16.3.0"
-    implementation "com.google.firebase:firebase-config:16.3.0"
-    implementation "com.google.firebase:firebase-perf:16.2.3"
-    implementation "com.google.firebase:firebase-messaging:17.4.0"
-    implementation "com.google.firebase:firebase-firestore:18.1.0"
+    implementation "com.google.firebase:firebase-core:16.0.8"
+    implementation "com.google.firebase:firebase-analytics:16.4.0"
+    implementation "com.google.firebase:firebase-config:16.4.1"
+    implementation "com.google.firebase:firebase-perf:16.2.4"
+    implementation "com.google.firebase:firebase-messaging:17.5.0"
+    implementation "com.google.firebase:firebase-firestore:18.2.0"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.9"
 
     // View
@@ -96,13 +96,13 @@ dependencies {
     implementation 'com.github.GwonHyeok:StickySwitch:356b9d8d26'
 
     // Util
-    implementation "com.tencent:mmkv:1.0.17"
+    implementation "com.tencent:mmkv:1.0.18"
     implementation "org.koin:koin-androidx-viewmodel:1.0.2"
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
     implementation "com.github.adrielcafe:KinApp:fad52f3f83"
-    implementation "com.markodevcic.peko:peko:1.0.0"
+    implementation "com.markodevcic.peko:peko:1.0.1"
     implementation "com.github.adrielcafe.androidcoroutinescopes:appcompat:1.0.1"
     implementation "com.github.adrielcafe.androidcoroutinescopes:viewmodel:1.0.1"
 }

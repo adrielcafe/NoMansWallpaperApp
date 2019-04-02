@@ -3,7 +3,7 @@ buildscript {
     ext.materialVersion = '1.0.0'
     ext.androidXVersion = '1.0.0'
     ext.lifecycleVersion = '2.0.0'
-    ext.workVersion = '1.0.0'
+    ext.workVersion = '2.0.0'
     ext.glideVersion = '4.9.0'
     ext.fastAdapterVersion = '3.3.1'
 
@@ -14,12 +14,12 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.4.0-rc01'
-        classpath "com.google.gms:google-services:4.0.2"
-        classpath "com.google.firebase:firebase-plugins:1.1.5"
+        classpath 'com.android.tools.build:gradle:3.4.0-rc02'
+        classpath "com.google.gms:google-services:4.2.0"
+        classpath "com.google.firebase:firebase-plugins:1.2.0"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "io.fabric.tools:gradle:1.26.0"
-        classpath "com.github.ben-manes:gradle-versions-plugin:0.20.0"
+        classpath "io.fabric.tools:gradle:1.28.1"
+        classpath "com.github.ben-manes:gradle-versions-plugin:0.21.0"
     }
 }
 
