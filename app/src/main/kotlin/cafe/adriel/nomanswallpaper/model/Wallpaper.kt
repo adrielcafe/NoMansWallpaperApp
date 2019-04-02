@@ -8,7 +8,6 @@ import java.util.*
 data class Wallpaper(
     val id: String = "",
     val url: String = "",
-    val thumbUrl: String = "",
     val colorHex: String = "#000000",
     val author: String = "",
     val createdAt: Date = Date()

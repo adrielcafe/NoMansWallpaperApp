@@ -19,7 +19,6 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
     private const val PREF_AUTO_CHANGE_FREQUENCY = "auto_change_frequency"
     private const val PREF_AUTO_CHANGE_NOTIFICATION = "auto_change_notification"
     private const val PREF_AUTO_CHANGE_ONLY_FAVORITES = "auto_change_only_favorites"
-    private const val PREF_HIGH_QUALITY_THUMB = "high_quality_thumb"
     private const val DEFAULT_AUTO_CHANGE_FREQUENCY = "7" // days
 
     fun init(context: Context){
@@ -77,9 +76,5 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
             WorkManager.getInstance().cancelAllWorkByTag(WallpaperWorker.TAG)
         }
     }
-
-    fun isHighQualityThumb(context: Context) =
-        PreferenceManager.getDefaultSharedPreferences(context)
-            .getBoolean(PREF_HIGH_QUALITY_THUMB, false)
 
 }

@@ -27,10 +27,6 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
             } catch (e: Exception){
                 Color.TRANSPARENT
             }
-            val imageUrl = if(wallpaper.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(context))
-                wallpaper.thumbUrl
-            else
-                wallpaper.url
             val placeholder = CircularProgressDrawable(context).apply {
                 centerRadius = 25f
                 strokeWidth = 5f
@@ -39,7 +35,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
             }
 
             vWallpaper.setBackgroundColor(imageColor)
-            vWallpaper.loadImage(imageUrl, placeholder)
+            vWallpaper.loadImage(wallpaper.url, placeholder)
 
             if (wallpaper.author.isNotBlank()) {
                 vAuthor.visibility = View.VISIBLE

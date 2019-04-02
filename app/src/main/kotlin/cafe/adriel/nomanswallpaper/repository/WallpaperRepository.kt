@@ -51,7 +51,6 @@ class WallpaperRepository {
         Wallpaper(
             document.id,
             document.getString("url") ?: "",
-            document.getString("thumbUrl") ?: "",
             document.getString("colorHex") ?: "",
             document.getString("author") ?: "",
             document.getDate("createdAt") ?: Date()

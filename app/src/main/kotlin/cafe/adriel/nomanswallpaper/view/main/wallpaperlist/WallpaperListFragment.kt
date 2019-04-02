@@ -217,13 +217,8 @@ class WallpaperListFragment : CoroutineScopedFragment() {
 
     private inner class WallpaperPreloadModelProvider : PreloadModelProvider<String> {
         override fun getPreloadItems(position: Int): List<String> {
-            val imageUrl = context?.run {
-                val wallpaper = adapter.getAdapterItem(position).wallpaper
-                if (wallpaper.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(this))
-                    wallpaper.thumbUrl
-                else
-                    wallpaper.url
-            }.orEmpty()
+            val wallpaper = adapter.getAdapterItem(position).wallpaper
+            val imageUrl = wallpaper.url
             return if(imageUrl.isNotEmpty()) singletonList(imageUrl) else emptyList()
         }
 

@@ -41,13 +41,4 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/general">
-
-        <SwitchPreferenceCompat
-            android:key="high_quality_thumb"
-            android:title="@string/high_quality_preview"
-            android:defaultValue="false"/>
-
-    </PreferenceCategory>
-
 </androidx.preference.PreferenceScreen>

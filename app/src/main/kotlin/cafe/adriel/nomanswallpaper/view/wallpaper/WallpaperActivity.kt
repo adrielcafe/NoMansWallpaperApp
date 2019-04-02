@@ -83,10 +83,6 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
                 vAuthor.visibility = View.GONE
             }
 
-            val imageUrl = if(it.thumbUrl.isNotBlank() && !Settings.isHighQualityThumb(this))
-                it.thumbUrl
-            else
-                it.url
             val imageColor = try {
                 Color.parseColor(it.colorHex)
             } catch (e: Exception){
@@ -97,7 +93,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
 
             supportPostponeEnterTransition()
             GlideApp.with(applicationContext)
-                .load(imageUrl)
+                .load(it.url)
                 .placeholder(imageColorDrawable)
                 .dontTransform()
                 .dontAnimate()
