@@ -24,7 +24,7 @@ object RemoteConfig {
         with(remoteConfig.fetch(0)) {
             try {
                 Tasks.await(this)
-                if (isSuccessful) remoteConfig.activateFetched()
+                if (isSuccessful) remoteConfig.activate()
             } catch (e: Exception){
                 Crashlytics.logException(e)
                 e.printStackTrace()

@@ -11,12 +11,12 @@ import com.github.ajalt.timberkt.Timber
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.tencent.mmkv.MMKV
-import org.koin.android.ext.android.startKoin
-import org.koin.android.logger.AndroidLogger
-import org.koin.androidx.viewmodel.ext.koin.viewModel
-import org.koin.core.Koin
-import org.koin.dsl.module.module
-import org.koin.log.EmptyLogger
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
+import org.koin.dsl.module
 
 class App : Application() {
 
@@ -51,7 +51,11 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        startKoin(this, listOf(repositoriesModule, viewModelsModule))
+        startKoin {
+            androidLogger(if(BuildConfig.RELEASE) Level.ERROR else Level.DEBUG)
+            androidContext(this@App)
+            modules(repositoriesModule, viewModelsModule)
+        }
         initLogging()
         initDatabase()
         MMKV.initialize(this)
@@ -60,20 +64,15 @@ class App : Application() {
     }
 
     private fun initDatabase(){
-        val settings = FirebaseFirestoreSettings.Builder()
-            .setTimestampsInSnapshotsEnabled(true)
-            .build()
-        FirebaseFirestore.getInstance().firestoreSettings = settings
+        FirebaseFirestore.getInstance().firestoreSettings = FirebaseFirestoreSettings.Builder().build()
     }
 
     private fun initLogging(){
         if (BuildConfig.RELEASE) {
             FirebaseFirestore.setLoggingEnabled(false)
-            Koin.logger = EmptyLogger()
         } else {
             Timber.plant(Timber.DebugTree())
             FirebaseFirestore.setLoggingEnabled(true)
-            Koin.logger = AndroidLogger()
         }
     }
 

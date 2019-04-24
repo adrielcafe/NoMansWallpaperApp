@@ -12,8 +12,8 @@ android {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
         targetSdkVersion 28
-        versionCode 11
-        versionName "1.2.3"
+        versionCode 12
+        versionName "1.2.4"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -43,6 +43,9 @@ android {
         preDexLibraries true
         maxProcessCount 8
     }
+    packagingOptions {
+        exclude 'META-INF/atomicfu.kotlin_module'
+    }
 }
 
 kapt {
@@ -59,7 +62,7 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.2.0"
 
     // Android
     implementation "com.google.android.material:material:$materialVersion"
@@ -76,9 +79,9 @@ dependencies {
     // Firebase
     implementation "com.google.firebase:firebase-core:16.0.8"
     implementation "com.google.firebase:firebase-analytics:16.4.0"
-    implementation "com.google.firebase:firebase-config:16.4.1"
-    implementation "com.google.firebase:firebase-perf:16.2.4"
-    implementation "com.google.firebase:firebase-messaging:17.5.0"
+    implementation "com.google.firebase:firebase-config:16.5.0"
+    implementation "com.google.firebase:firebase-perf:16.2.5"
+    implementation "com.google.firebase:firebase-messaging:17.6.0"
     implementation "com.google.firebase:firebase-firestore:18.2.0"
     implementation "com.crashlytics.sdk.android:crashlytics:2.9.9"
 
@@ -96,8 +99,8 @@ dependencies {
     implementation 'com.github.GwonHyeok:StickySwitch:356b9d8d26'
 
     // Util
-    implementation "com.tencent:mmkv:1.0.18"
-    implementation "org.koin:koin-androidx-viewmodel:1.0.2"
+    implementation "com.tencent:mmkv:1.0.19"
+    implementation "org.koin:koin-androidx-viewmodel:2.0.0-rc-3"
     implementation "org.greenrobot:eventbus:3.1.1"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
