@@ -6,7 +6,7 @@ import com.google.firebase.messaging.RemoteMessage
 
 class NotificationService : FirebaseMessagingService() {
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         FirebaseFirestore.getInstance().enableNetwork()
     }
 

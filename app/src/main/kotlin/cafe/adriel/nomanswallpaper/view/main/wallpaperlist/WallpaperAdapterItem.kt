@@ -1,5 +1,6 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
+import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
@@ -7,7 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
-import cafe.adriel.nomanswallpaper.util.*
+import cafe.adriel.nomanswallpaper.util.clearImage
+import cafe.adriel.nomanswallpaper.util.drawableFrom
+import cafe.adriel.nomanswallpaper.util.loadImage
+import cafe.adriel.nomanswallpaper.util.px
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
 
@@ -15,6 +19,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
 
     override fun getLayoutRes() = R.layout.item_wallpaper
 
+    @SuppressLint("ResourceType")
     override fun getType() = layoutRes
 
     override fun getViewHolder(v: View) = ViewHolder(v)

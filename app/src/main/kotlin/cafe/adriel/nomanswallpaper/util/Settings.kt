@@ -1,5 +1,6 @@
 package cafe.adriel.nomanswallpaper.util
 
+import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
@@ -7,9 +8,11 @@ import androidx.work.*
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.background.WallpaperWorker
 import com.google.firebase.messaging.FirebaseMessaging
+import org.koin.core.KoinComponent
+import org.koin.core.inject
 import java.util.concurrent.TimeUnit
 
-object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
+object Settings : SharedPreferences.OnSharedPreferenceChangeListener, KoinComponent {
     // Notification
     private const val NOTIFICATION_TOPIC = "wallpaper_added"
 
@@ -20,8 +23,10 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
     private const val PREF_AUTO_CHANGE_NOTIFICATION = "auto_change_notification"
     private const val PREF_AUTO_CHANGE_ONLY_FAVORITES = "auto_change_only_favorites"
     private const val DEFAULT_AUTO_CHANGE_FREQUENCY = "7" // days
+    
+    private val context: Context by inject<Application>()
 
-    fun init(context: Context){
+    fun init(){
         PreferenceManager.setDefaultValues(context, R.xml.preferences, false)
 
         val notificationsEnabled = PreferenceManager.getDefaultSharedPreferences(context)
@@ -69,11 +74,11 @@ object Settings : SharedPreferences.OnSharedPreferenceChangeListener {
                 .setConstraints(constraints)
                 .setInputData(data)
                 .build()
-            WorkManager.getInstance().enqueueUniquePeriodicWork(
+            WorkManager.getInstance(context).enqueueUniquePeriodicWork(
                 WallpaperWorker.TAG, ExistingPeriodicWorkPolicy.REPLACE, work)
             Analytics.logAutoChangeWallpaper()
         } else {
-            WorkManager.getInstance().cancelAllWorkByTag(WallpaperWorker.TAG)
+            WorkManager.getInstance(context).cancelAllWorkByTag(WallpaperWorker.TAG)
         }
     }
 

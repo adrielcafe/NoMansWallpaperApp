@@ -9,11 +9,11 @@ import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import androidx.lifecycle.Observer
-import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
 import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
@@ -33,7 +33,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.drawer_header.view.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemSelectedListener,
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener,
     DonateDialog.OnDonateListener, StickySwitch.OnSelectedChangeListener, OnFABMenuSelectedListener {
 
     private val viewModel by viewModel<MainViewModel>()
@@ -226,7 +226,7 @@ class MainActivity : CoroutineScopedActivity(), NavigationView.OnNavigationItemS
         }
     }
 
-    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm) {
+    inner class SectionsPagerAdapter(fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
         private val sections by lazy { listOf(
             WallpaperListFragment(),

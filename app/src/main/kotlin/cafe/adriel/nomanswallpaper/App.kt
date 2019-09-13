@@ -54,12 +54,12 @@ class App : Application() {
         startKoin {
             androidLogger(if(BuildConfig.RELEASE) Level.ERROR else Level.DEBUG)
             androidContext(this@App)
-            modules(repositoriesModule, viewModelsModule)
+            modules(listOf(repositoriesModule, viewModelsModule))
         }
         initLogging()
         initDatabase()
         MMKV.initialize(this)
-        Settings.init(this)
+        Settings.init()
         Analytics.init(this)
     }
 

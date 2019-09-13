@@ -1,24 +1,21 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
-import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
+import androidx.lifecycle.*
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import com.crashlytics.android.Crashlytics
 import kotlinx.coroutines.launch
 
 class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) :
-    CoroutineScopedAndroidViewModel(app) {
+    AndroidViewModel(app) {
 
     enum class SortBy { RANDOM, NEWEST, OLDEST }
 
     private val _sortBy = MutableLiveData<SortBy>()
     private val _wallpapers = Transformations.switchMap(_sortBy) { sortBy ->
         val wallpapers = MutableLiveData<List<Wallpaper>>()
-        launch {
+        viewModelScope.launch {
             try {
                 wallpapers.value = wallpaperRepo.getWallpapers().run {
                     when(sortBy){

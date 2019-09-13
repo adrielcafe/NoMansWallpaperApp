@@ -3,9 +3,10 @@ package cafe.adriel.nomanswallpaper.view.main
 import android.app.Activity
 import android.app.Application
 import android.content.Intent
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
+import androidx.lifecycle.viewModelScope
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.util.Analytics
 import cafe.adriel.nomanswallpaper.util.RemoteConfig
@@ -16,7 +17,7 @@ import com.github.stephenvinouze.core.models.KinAppPurchase
 import com.github.stephenvinouze.core.models.KinAppPurchaseResult
 import kotlinx.coroutines.launch
 
-class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
+class MainViewModel(app: Application) : AndroidViewModel(app),
     KinAppManager.KinAppListener {
 
     private val billingManager by lazy {
@@ -32,7 +33,7 @@ class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
 
     init {
         billingManager.bind(this)
-        launch {
+        viewModelScope.launch {
             RemoteConfig.load()
             _appUpdateAvailable.value = BuildConfig.VERSION_CODE < RemoteConfig.getMinVersion()
         }
@@ -44,7 +45,7 @@ class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
     }
 
     override fun onBillingReady() {
-        launch {
+        viewModelScope.launch {
             try {
                 _billingSupported.value = billingManager.isBillingSupported(KinAppProductType.INAPP)
                 billingManager.restorePurchases(KinAppProductType.INAPP)?.forEach {
@@ -60,7 +61,7 @@ class MainViewModel(app: Application) : CoroutineScopedAndroidViewModel(app),
 
     override fun onPurchaseFinished(purchaseResult: KinAppPurchaseResult, purchase: KinAppPurchase?) {
         if (purchaseResult == KinAppPurchaseResult.SUCCESS && purchase != null) {
-            launch {
+            viewModelScope.launch {
                 billingManager.consumePurchase(purchase)
                 _purchaseCompleted.value = true
             }

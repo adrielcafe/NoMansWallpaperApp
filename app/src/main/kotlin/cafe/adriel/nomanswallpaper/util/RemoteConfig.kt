@@ -13,10 +13,13 @@ object RemoteConfig {
 
     private val remoteConfig by lazy {
         FirebaseRemoteConfig.getInstance().apply {
-            val settings = FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(!BuildConfig.RELEASE)
+            val settings = FirebaseRemoteConfigSettings
+                .Builder()
+                .apply {
+                    if (BuildConfig.RELEASE) setMinimumFetchIntervalInSeconds(0)
+                }
                 .build()
-            setConfigSettings(settings)
+            setConfigSettingsAsync(settings)
         }
     }
 

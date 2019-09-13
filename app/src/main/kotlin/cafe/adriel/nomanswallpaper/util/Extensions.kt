@@ -107,7 +107,7 @@ fun ViewGroup.inflate(@LayoutRes resId: Int): View? =
 fun ImageView.loadImage(url: Any, @ColorInt placeholder: Int = Color.TRANSPARENT, listener: RequestListener<Drawable>? = null) =
     loadImage(url, ColorDrawable(placeholder), listener)
 
-fun ImageView.loadImage(url: Any, @ColorInt placeholder: Drawable? = null, listener: RequestListener<Drawable>? = null) =
+fun ImageView.loadImage(url: Any, placeholder: Drawable? = null, listener: RequestListener<Drawable>? = null) =
     GlideApp.with(context.applicationContext)
         .load(url)
         .placeholder(placeholder)

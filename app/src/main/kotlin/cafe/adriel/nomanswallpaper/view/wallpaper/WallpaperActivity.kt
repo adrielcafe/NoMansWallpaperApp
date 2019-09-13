@@ -9,10 +9,11 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import android.view.animation.AnimationUtils
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.Observer
-import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedActivity
+import androidx.lifecycle.lifecycleScope
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.*
@@ -37,7 +38,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, OnMenuStateChangedListener {
+class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener, OnMenuStateChangedListener {
 
     companion object {
         private const val EXTRA_WALLPAPER = "wallpaper"
@@ -160,7 +161,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
     }
 
     override fun onMenuItemSelected(view: View?, id: Int) {
-        launch {
+        lifecycleScope.launch {
             val loadingSnackBar = Snackbar.make(vRoot,
                 R.string.downloading_wallpaper, Snackbar.LENGTH_LONG)
             delay((AnimationHelper.REVEAL_DURATION * 2).toLong())
@@ -249,7 +250,7 @@ class WallpaperActivity : CoroutineScopedActivity(), OnFABMenuSelectedListener, 
     }
 
     private fun downloadWallpaper(wallpaper: Wallpaper) {
-        launch {
+        lifecycleScope.launch {
             val permissionResult = try {
                 val rationaleSnackBar =
                     Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)

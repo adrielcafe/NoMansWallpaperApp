@@ -76,7 +76,7 @@ class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker
     }
 
     private fun setRandomWallpaper(wallpapers: List<Wallpaper>): Boolean = try {
-        val randomPosition = (0 until wallpapers.size).shuffled()[0]
+        val randomPosition = wallpapers.indices.shuffled()[0]
         val wallpaper = wallpapers[randomPosition]
         val wallpaperFile = Glide.with(context)
             .downloadOnly()

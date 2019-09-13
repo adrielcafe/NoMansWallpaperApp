@@ -4,10 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import cafe.adriel.androidcoroutinescopes.appcompat.CoroutineScopedFragment
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.*
@@ -35,7 +36,7 @@ import org.greenrobot.eventbus.Subscribe
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.Collections.singletonList
 
-class WallpaperListFragment : CoroutineScopedFragment() {
+class WallpaperListFragment : Fragment() {
 
     companion object {
         private const val FILTER_ALL = ""
@@ -122,7 +123,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
             R.id.vItemRoot -> if(!item.isLoading(view)) showWallpaper(view.vWallpaper, item.wallpaper)
             R.id.vFavorite -> singleViewModel.toggleFavorite(item.wallpaper)
                 .observeOnce(this, Observer {
-                    launch {
+                    lifecycleScope.launch {
                         listViewModel.loadFavorites()
                         item.updateFavorite(view)
                     }
@@ -148,7 +149,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
     }
 
     private fun showWallpapers(wallpapers: List<Wallpaper>) {
-        launch {
+        lifecycleScope.launch {
             listViewModel.loadFavorites()
             if (wallpapers.isNotEmpty()) {
                 val adapterItems = withContext(Dispatchers.Default) {
@@ -174,16 +175,16 @@ class WallpaperListFragment : CoroutineScopedFragment() {
 
     private fun updateState(){
         vState?.viewState = if(adapter.adapterItems.isEmpty()) {
-            val emptyView = vState?.getView(MultiStateView.VIEW_STATE_EMPTY) as ViewGroup
+            val emptyView = vState?.getView(MultiStateView.ViewState.EMPTY) as ViewGroup
             emptyView.vStateIcon.loadImage(R.drawable.drawer_header_logo, null)
-            MultiStateView.VIEW_STATE_EMPTY
+            MultiStateView.ViewState.EMPTY
         } else {
-            MultiStateView.VIEW_STATE_CONTENT
+            MultiStateView.ViewState.CONTENT
         }
     }
 
     fun updateFilter(onlyFavorites: Boolean){
-        launch {
+        lifecycleScope.launch {
             listViewModel.loadFavorites()
             if(isAdded) {
                 vWallpaperList?.post {
@@ -205,7 +206,7 @@ class WallpaperListFragment : CoroutineScopedFragment() {
     @Subscribe(sticky = true)
     fun onEvent(event: FavoriteWallpaperEvent){
         EventBus.getDefault().removeStickyEvent(event)
-        launch {
+        lifecycleScope.launch {
             listViewModel.loadFavorites()
             getAdapterItem(event.wallpaper)?.let { item ->
                 vWallpaperList?.findViewHolderForItemId(item.identifier)?.apply {

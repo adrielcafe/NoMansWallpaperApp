@@ -37,7 +37,7 @@ class WallpaperRepository {
                             FirebaseFirestore.getInstance().disableNetwork()
                         }
                     }
-                    ?.map { toWallpaper(it) }
+                    ?.map(::toWallpaper)
                 items ?: emptyList()
             } else {
                 Crashlytics.logException(exception)

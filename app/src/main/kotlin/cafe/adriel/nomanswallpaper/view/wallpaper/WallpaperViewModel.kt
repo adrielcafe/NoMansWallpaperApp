@@ -7,9 +7,10 @@ import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.core.content.FileProvider
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import cafe.adriel.androidcoroutinescopes.viewmodel.CoroutineScopedAndroidViewModel
+import androidx.lifecycle.viewModelScope
 import cafe.adriel.nomanswallpaper.App
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
@@ -23,7 +24,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) : CoroutineScopedAndroidViewModel(app) {
+class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) : AndroidViewModel(app) {
 
     companion object {
         private const val PROVIDER_AUTHORITY = "${BuildConfig.APPLICATION_ID}.provider"
@@ -39,7 +40,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
 
     fun isFavorite(wallpaper: Wallpaper): LiveData<Boolean> {
         val favorite = MutableLiveData<Boolean>()
-        launch {
+        viewModelScope.launch {
             favorite.value = wallpaperRepo.isFavorite(wallpaper)
         }
         return favorite
@@ -47,7 +48,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
 
     fun toggleFavorite(wallpaper: Wallpaper): LiveData<Boolean> {
         val favorite = MutableLiveData<Boolean>()
-        launch {
+        viewModelScope.launch {
             if(wallpaperRepo.isFavorite(wallpaper)){
                 wallpaperRepo.removeFavorite(wallpaper)
                 favorite.value = false
@@ -61,7 +62,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
     }
 
     fun setWallpaper(wallpaper: Wallpaper, quick: Boolean = false) {
-        launch {
+        viewModelScope.launch {
             try {
                 val wallpaperFile = getWallpaperFile(wallpaper)
                 if (quick) {
@@ -80,7 +81,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
     }
 
     fun shareWallpaper(wallpaper: Wallpaper) {
-        launch {
+        viewModelScope.launch {
             try {
                 val context = getApplication<App>() as Context
                 val wallpaperFile = getWallpaperFile(wallpaper)
@@ -101,7 +102,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
     }
 
     fun downloadWallpaper(wallpaper: Wallpaper) {
-        launch {
+        viewModelScope.launch {
             try {
                 val wallpaperUri = saveWallpaperInGallery(wallpaper)
                 _wallpaperDownloaded.value = wallpaperUri
