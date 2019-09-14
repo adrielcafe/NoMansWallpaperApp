@@ -1,6 +1,5 @@
 package cafe.adriel.nomanswallpaper.view.main.wallpaperlist
 
-import android.annotation.SuppressLint
 import android.graphics.Color
 import android.view.View
 import androidx.core.graphics.drawable.DrawableCompat
@@ -15,12 +14,11 @@ import cafe.adriel.nomanswallpaper.util.px
 import com.mikepenz.fastadapter.items.AbstractItem
 import kotlinx.android.synthetic.main.item_wallpaper.view.*
 
-class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () -> Boolean) : AbstractItem<WallpaperAdapterItem, WallpaperAdapterItem.ViewHolder>() {
-
-    override fun getLayoutRes() = R.layout.item_wallpaper
-
-    @SuppressLint("ResourceType")
-    override fun getType() = layoutRes
+class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () -> Boolean) : AbstractItem<WallpaperAdapterItem.ViewHolder>() {
+    
+    override val layoutRes = R.layout.item_wallpaper
+    
+    override val type = layoutRes
 
     override fun getViewHolder(v: View) = ViewHolder(v)
 

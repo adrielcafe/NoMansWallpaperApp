@@ -22,7 +22,7 @@ import com.bumptech.glide.util.FixedPreloadSizeProvider
 import com.google.android.material.snackbar.Snackbar
 import com.kennyc.view.MultiStateView
 import com.mikepenz.fastadapter.FastAdapter
-import com.mikepenz.fastadapter.commons.adapters.FastItemAdapter
+import com.mikepenz.fastadapter.adapters.FastItemAdapter
 import com.mikepenz.fastadapter.listeners.ClickEventHook
 import kotlinx.android.synthetic.main.fragment_wallpaper_list.*
 import kotlinx.android.synthetic.main.fragment_wallpaper_list.view.*
@@ -58,24 +58,20 @@ class WallpaperListFragment : Fragment() {
             adapter = FastItemAdapter()
             adapter.apply {
                 setHasStableIds(true)
-                withUseIdDistributor(true)
-                withOnClickListener { view, _, item, _ ->
+                addEventHook(object : ClickEventHook<WallpaperAdapterItem>() {
+                    override fun onBindMany(viewHolder: RecyclerView.ViewHolder) =
+                        viewHolder.itemView.run { listOf(vFavorite, vSet) }
+
+                    override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<WallpaperAdapterItem>, item: WallpaperAdapterItem) =
+                        onListItemClicked(view, item)
+                })
+                onClickListener = { view, _, item, _ ->
                     view?.run {
                         onListItemClicked(this, item)
                     }
                     true
                 }
-                withEventHook(object : ClickEventHook<WallpaperAdapterItem>() {
-                    override fun onBindMany(viewHolder: RecyclerView.ViewHolder) =
-                        viewHolder.itemView.run { listOf(vFavorite, vSet) }
-
-                    override fun onClick(view: View?, position: Int, fastAdapter: FastAdapter<WallpaperAdapterItem>?, item: WallpaperAdapterItem?) {
-                        if (view != null && item != null) {
-                            onListItemClicked(view, item)
-                        }
-                    }
-                })
-                itemFilter.withFilterPredicate { item, constraint ->
+                itemFilter.filterPredicate = { item, constraint ->
                     if(constraint == FILTER_FAVORITES)
                         listViewModel.isFavorite(item.wallpaper)
                     else

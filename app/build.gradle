@@ -98,7 +98,7 @@ dependencies {
     implementation "com.github.bumptech.glide:okhttp3-integration:$glideVersion"
     implementation "com.github.bumptech.glide:recyclerview-integration:$glideVersion"
     implementation "com.mikepenz:fastadapter:$fastAdapterVersion"
-    implementation "com.mikepenz:fastadapter-commons:$fastAdapterVersion"
+    implementation "com.mikepenz:fastadapter-extensions-utils:$fastAdapterVersion"
     implementation "io.github.kobakei:ratethisapp:1.2.0"
     implementation "com.github.lawloretienne:discreteslider:0.0.9"
     implementation "com.hlab.fabrevealmenu:fab-reveal-menu:1.0.4"
