@@ -63,7 +63,7 @@ class WallpaperListFragment : Fragment() {
                         viewHolder.itemView.run { listOf(vFavorite, vSet) }
 
                     override fun onClick(v: View, position: Int, fastAdapter: FastAdapter<WallpaperAdapterItem>, item: WallpaperAdapterItem) =
-                        onListItemClicked(view, item)
+                        onListItemClicked(v, item)
                 })
                 onClickListener = { view, _, item, _ ->
                     view?.run {
@@ -118,7 +118,7 @@ class WallpaperListFragment : Fragment() {
         when (view.id) {
             R.id.vItemRoot -> if(!item.isLoading(view)) showWallpaper(view.vWallpaper, item.wallpaper)
             R.id.vFavorite -> singleViewModel.toggleFavorite(item.wallpaper)
-                .observeOnce(this, Observer {
+                .observeOnce(this, {
                     lifecycleScope.launch {
                         listViewModel.loadFavorites()
                         item.updateFavorite(view)

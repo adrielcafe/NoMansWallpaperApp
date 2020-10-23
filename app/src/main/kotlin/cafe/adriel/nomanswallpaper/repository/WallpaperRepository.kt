@@ -2,8 +2,8 @@ package cafe.adriel.nomanswallpaper.repository
 
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.util.mmkv
-import com.crashlytics.android.Crashlytics
 import com.google.android.gms.tasks.Tasks
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +40,10 @@ class WallpaperRepository {
                     ?.map(::toWallpaper)
                 items ?: emptyList()
             } else {
-                Crashlytics.logException(exception)
-                exception?.printStackTrace()
+                exception?.apply {
+                    FirebaseCrashlytics.getInstance().recordException(this)
+                    printStackTrace()
+                }
                 emptyList()
             }
         }

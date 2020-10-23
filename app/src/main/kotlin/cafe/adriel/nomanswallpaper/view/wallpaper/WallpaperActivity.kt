@@ -21,15 +21,14 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import com.crashlytics.android.Crashlytics
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.hlab.fabrevealmenu.helper.AnimationHelper
 import com.hlab.fabrevealmenu.listeners.OnFABMenuSelectedListener
 import com.hlab.fabrevealmenu.listeners.OnMenuStateChangedListener
 import com.markodevcic.peko.Peko
-import com.markodevcic.peko.PermissionRequestResult
-import com.markodevcic.peko.rationale.SnackBarRationale
+import com.markodevcic.peko.PermissionResult
 import com.tinsuke.icekick.extension.freezeInstanceState
 import com.tinsuke.icekick.extension.parcelState
 import com.tinsuke.icekick.extension.unfreezeInstanceState
@@ -251,20 +250,18 @@ class WallpaperActivity : AppCompatActivity(), OnFABMenuSelectedListener, OnMenu
 
     private fun downloadWallpaper(wallpaper: Wallpaper) {
         lifecycleScope.launch {
-            val permissionResult = try {
-                val rationaleSnackBar =
-                    Snackbar.make(vRoot, R.string.permissions_needed, Snackbar.LENGTH_LONG)
-                val rationale = SnackBarRationale(rationaleSnackBar, getString(R.string.allow))
+            val result = try {
                 Peko.requestPermissionsAsync(
                     this@WallpaperActivity,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE, rationale = rationale
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
                 )
             } catch (e: Exception){
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
-                PermissionRequestResult(emptyList(), emptyList())
+                PermissionResult.Cancelled
             }
-            if (Manifest.permission.WRITE_EXTERNAL_STORAGE in permissionResult.grantedPermissions) {
+            if (result is PermissionResult.Granted 
+                && Manifest.permission.WRITE_EXTERNAL_STORAGE in result.grantedPermissions) {
                 Snackbar.make(vRoot, R.string.downloading_wallpaper, Snackbar.LENGTH_LONG).show()
                 viewModel.downloadWallpaper(wallpaper)
             }

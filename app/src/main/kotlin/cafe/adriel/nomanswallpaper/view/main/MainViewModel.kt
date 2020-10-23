@@ -10,11 +10,11 @@ import androidx.lifecycle.viewModelScope
 import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.util.Analytics
 import cafe.adriel.nomanswallpaper.util.RemoteConfig
-import com.crashlytics.android.Crashlytics
 import com.github.stephenvinouze.core.managers.KinAppManager
 import com.github.stephenvinouze.core.models.KinAppProductType
 import com.github.stephenvinouze.core.models.KinAppPurchase
 import com.github.stephenvinouze.core.models.KinAppPurchaseResult
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.launch
 
 class MainViewModel(app: Application) : AndroidViewModel(app),
@@ -52,7 +52,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app),
                     billingManager.consumePurchase(it)
                 }
             } catch (e: Exception) {
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
                 _billingSupported.value = false
             }
@@ -74,7 +74,7 @@ class MainViewModel(app: Application) : AndroidViewModel(app),
         try {
             billingManager.verifyPurchase(requestCode, resultCode, data)
         } catch (e: Exception) {
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()
             false
         }

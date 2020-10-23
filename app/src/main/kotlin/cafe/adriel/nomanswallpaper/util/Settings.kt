@@ -8,10 +8,12 @@ import androidx.work.*
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.background.WallpaperWorker
 import com.google.firebase.messaging.FirebaseMessaging
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.concurrent.TimeUnit
 
+@OptIn(KoinApiExtension::class)
 object Settings : SharedPreferences.OnSharedPreferenceChangeListener, KoinComponent {
     // Notification
     private const val NOTIFICATION_TOPIC = "wallpaper_added"

@@ -1,19 +1,18 @@
 apply plugin: 'com.android.application'
-apply plugin: 'com.google.firebase.firebase-perf'
+apply plugin: 'com.google.firebase.crashlytics'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
-apply plugin: 'io.fabric'
 apply plugin: 'com.github.ben-manes.versions'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 30
     defaultConfig {
         applicationId "cafe.adriel.nomanswallpaper"
         minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 13
-        versionName "1.2.5"
+        targetSdkVersion 30
+        versionCode 14
+        versionName "1.2.6"
         resConfigs 'en', 'pt'
     }
     buildTypes {
@@ -23,9 +22,6 @@ android {
             useProguard false
             buildConfigField 'Boolean', 'RELEASE', 'false'
             resValue 'string', 'app_name', 'NMW Dev'
-            FirebasePerformance {
-                instrumentationEnabled false
-            }
         }
         release {
             minifyEnabled true
@@ -50,7 +46,7 @@ android {
         maxProcessCount 8
     }
     packagingOptions {
-        exclude 'META-INF/atomicfu.kotlin_module'
+        exclude 'META-INF/*'
     }
 }
 
@@ -68,30 +64,29 @@ dependencies {
 
     // Kotlin
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9"
 
     // Android
-    implementation "com.google.android.material:material:1.1.0-alpha10"
-    implementation "androidx.appcompat:appcompat:1.1.0"
-    implementation "androidx.recyclerview:recyclerview:1.1.0-beta04"
-    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02"
-    implementation "androidx.preference:preference:1.1.0"
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0-alpha04"
-    implementation "androidx.core:core-ktx:1.2.0-alpha04"
-    implementation "androidx.fragment:fragment-ktx:1.2.0-alpha03"
-    implementation("androidx.work:work-runtime-ktx:2.3.0-alpha01"){
+    implementation "com.google.android.material:material:1.2.1"
+    implementation "androidx.appcompat:appcompat:1.2.0"
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+    implementation "androidx.preference:preference-ktx:1.1.1"
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.core:core-ktx:1.3.2"
+    implementation "androidx.fragment:fragment-ktx:1.2.5"
+    implementation("androidx.work:work-runtime-ktx:2.4.0"){
         exclude group: 'com.google.guava', module: 'listenablefuture'
     }
 
     // Firebase
-    implementation "com.google.firebase:firebase-core:17.2.0"
-    implementation "com.google.firebase:firebase-analytics:17.2.0"
-    implementation "com.google.firebase:firebase-config:19.0.1"
-    implementation "com.google.firebase:firebase-perf:19.0.0"
-    implementation "com.google.firebase:firebase-messaging:20.0.0"
-    implementation "com.google.firebase:firebase-firestore:21.1.0"
-    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
-
+    implementation "com.google.firebase:firebase-core:17.5.1"
+    implementation "com.google.firebase:firebase-config:19.2.0"
+    implementation "com.google.firebase:firebase-messaging:20.3.0"
+    implementation "com.google.firebase:firebase-firestore:21.7.1"
+    implementation 'com.google.firebase:firebase-crashlytics-ktx:17.2.2'
+    implementation 'com.google.firebase:firebase-analytics-ktx:17.6.0'
+    
     // View
     kapt "com.github.bumptech.glide:compiler:$glideVersion"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
@@ -106,13 +101,13 @@ dependencies {
     implementation 'com.github.GwonHyeok:StickySwitch:356b9d8d26'
 
     // Util
-    implementation "com.tencent:mmkv:1.0.23"
-    implementation "org.koin:koin-androidx-viewmodel:2.0.1"
-    implementation "org.greenrobot:eventbus:3.1.1"
+    implementation "com.tencent:mmkv:1.2.4"
+    implementation "org.koin:koin-androidx-viewmodel:2.2.0-rc-1"
+    implementation "org.greenrobot:eventbus:3.2.0"
     implementation "com.github.ajalt:timberkt:1.5.1"
     implementation "com.github.tinsukE:icekick:0.4"
     implementation "com.github.adrielcafe:KinApp:fad52f3f83"
-    implementation "com.markodevcic.peko:peko:1.0.1"
+    implementation "com.markodevcic.peko:peko:2.1.1"
 }
 
 apply plugin: 'com.google.gms.google-services'

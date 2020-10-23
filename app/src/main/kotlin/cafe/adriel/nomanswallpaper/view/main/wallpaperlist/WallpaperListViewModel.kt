@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.launch
 
 class WallpaperListViewModel(app: Application, private val wallpaperRepo: WallpaperRepository) :
@@ -25,7 +25,7 @@ class WallpaperListViewModel(app: Application, private val wallpaperRepo: Wallpa
                     }
                 }
             } catch (e: Exception){
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
                 wallpapers.value = emptyList()
             }

@@ -22,7 +22,7 @@ class WallpaperAdapterItem(val wallpaper: Wallpaper, private val isFavorite: () 
 
     override fun getViewHolder(v: View) = ViewHolder(v)
 
-    override fun bindView(holder: ViewHolder, payloads: MutableList<Any>) {
+    override fun bindView(holder: ViewHolder, payloads: List<Any>) {
         super.bindView(holder, payloads)
         with(holder.itemView) {
             val imageColor = try {

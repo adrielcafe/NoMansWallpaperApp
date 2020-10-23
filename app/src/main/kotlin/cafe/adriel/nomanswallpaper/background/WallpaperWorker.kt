@@ -16,14 +16,16 @@ import cafe.adriel.nomanswallpaper.util.GlideApp
 import cafe.adriel.nomanswallpaper.util.mmkv
 import cafe.adriel.nomanswallpaper.view.main.MainActivity
 import com.bumptech.glide.Glide
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import org.koin.core.KoinComponent
-import org.koin.core.inject
+import org.koin.core.component.KoinApiExtension
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import java.util.concurrent.LinkedBlockingQueue
 
+@OptIn(KoinApiExtension::class)
 class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker(context, params), KoinComponent {
 
     companion object {
@@ -86,7 +88,7 @@ class WallpaperWorker(val context : Context, params : WorkerParameters) : Worker
         WallpaperManager.getInstance(context).setStream(wallpaperFile.inputStream())
         true
     } catch (e: Exception){
-        Crashlytics.logException(e)
+        FirebaseCrashlytics.getInstance().recordException(e)
         e.printStackTrace()
         false
     }

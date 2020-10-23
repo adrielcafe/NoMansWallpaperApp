@@ -18,7 +18,7 @@ import cafe.adriel.nomanswallpaper.model.Wallpaper
 import cafe.adriel.nomanswallpaper.repository.WallpaperRepository
 import cafe.adriel.nomanswallpaper.util.Analytics
 import com.bumptech.glide.Glide
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -73,7 +73,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
                 }
                 Analytics.logSetWallpaper(wallpaper)
             } catch (e: Exception) {
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
                 _wallpaperUpdated.value = false
             }
@@ -95,7 +95,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
                     Intent.createChooser(intent, context.getString(R.string.share_with)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
                 Analytics.logShareWallpaper(wallpaper)
             } catch (e: Exception) {
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
             }
         }
@@ -108,7 +108,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
                 _wallpaperDownloaded.value = wallpaperUri
                 Analytics.logDownloadWallpaper(wallpaper)
             } catch (e: Exception) {
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
                 _wallpaperDownloaded.value = ""
             }
@@ -122,7 +122,7 @@ class WallpaperViewModel(app: Application, private val wallpaperRepo: WallpaperR
                 setDataAndType(Uri.parse(wallpaperUri), MIME_TYPE_IMAGE)
                 getApplication<App>().startActivity(this)
             } catch (e: Exception){
-                Crashlytics.logException(e)
+                FirebaseCrashlytics.getInstance().recordException(e)
                 e.printStackTrace()
             }
         }

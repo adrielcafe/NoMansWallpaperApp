@@ -28,7 +28,7 @@ import androidx.lifecycle.Observer
 import cafe.adriel.nomanswallpaper.R
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestListener
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.tencent.mmkv.MMKV
 import org.greenrobot.eventbus.EventBus
 
@@ -59,7 +59,7 @@ fun String.share(activity: Activity) =
 
 fun String.copyToClipboard(context: Context) = try {
     val clipData = ClipData.newPlainText("Wallpaper URL", this)
-    context.getSystemService<ClipboardManager>()?.primaryClip = clipData
+    context.getSystemService<ClipboardManager>()?.setPrimaryClip(clipData)
     true
 } catch (e: java.lang.Exception) {
     false
@@ -87,7 +87,7 @@ fun Uri.open(context: Context, showErrorMessage: Boolean = true) = try {
     if(showErrorMessage) {
         Toast.makeText(context, R.string.something_went_wrong, Toast.LENGTH_SHORT).show()
     }
-    Crashlytics.logException(e)
+    FirebaseCrashlytics.getInstance().recordException(e)
     e.printStackTrace()
 }
 

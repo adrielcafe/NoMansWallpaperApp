@@ -13,7 +13,7 @@ import cafe.adriel.nomanswallpaper.BuildConfig
 import cafe.adriel.nomanswallpaper.R
 import cafe.adriel.nomanswallpaper.util.Analytics
 import cafe.adriel.nomanswallpaper.util.open
-import com.crashlytics.android.Crashlytics
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import kotlinx.android.synthetic.main.dialog_about.*
 
 class AboutDialog private constructor(context: Context) : AppCompatDialog(context) {
@@ -77,7 +77,7 @@ class AboutDialog private constructor(context: Context) : AppCompatDialog(contex
                 context.startActivity(this)
             }
         } catch (e: Exception) {
-            Crashlytics.logException(e)
+            FirebaseCrashlytics.getInstance().recordException(e)
             e.printStackTrace()
             Toast.makeText(context, "Oops! No Email app found :/", Toast.LENGTH_LONG).show()
         }
